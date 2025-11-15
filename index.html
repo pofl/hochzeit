@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Marked in the browser</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Tangerine:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .tangerine-regular {
+        font-family: "Tangerine", cursive;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .tangerine-bold {
+        font-family: "Tangerine", cursive;
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      .playfair-display-400 {
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .noto-sans-400 {
+        font-family: "Noto Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-variation-settings: "wdth" 100;
+      }
+    </style>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" /> -->
+
+    <style>
+      :root{
+        font-size: 18px;
+        line-height: 1.6;
+        font-weight: 300;
+        font-family: "Noto Sans", sans-serif;
+      }
+      body {
+        max-width: 600px;
+        margin: 40px auto;
+        color: #444;
+        padding: 0 10px;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.2;
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+      }
+      h1 {
+        font-size: 1.75em;
+      }
+      h2 {
+        font-size: 1.5em;
+      }
+      h3 {
+        font-size: 1.25em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <my-header>
+        <style>
+          my-header {
+            margin-top: 120px;
+            margin-bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            h1 {
+              margin-top: 0;
+              margin-bottom: 15px;
+              font-size: 4em;
+              font-family: "Tangerine", serif;
+              font-optical-sizing: auto;
+              font-weight: 400;
+              font-style: normal;
+            }
+            h2 {
+              margin: 0;
+              padding: 0.4em 0.1em;
+              border-top: 1px solid #444;
+              border-bottom: 1px solid #444;
+            }
+          }
+        </style>
+        <h1>Shruti und Flo heiraten</h1>
+        <h2>April oder Mai 2026</h2>
+      </my-header>
+
+      <article id="content"></article>
+    </main>
+    <script>
+      const md = `
+Wir wollen 2026 im April oder im Mai in Indien heiraten.
+
+## Was euch erwartet
+
+* Es wird eine traditionelle indische Hochzeit sein
+* Es soll im Sommer auch eine Feier in Deutschland geben, aber wir wissen noch
+  nicht wie groß wir diese aufziehen werden.
+* Die Hochzeitsfeier erstreckt sich über drei Tage und findet traditionell ohne
+  Alkohol statt.
+
+## Was wir noch nicht wissen
+
+* Wann genau
+* Wo genau
+
+## Reiseinformationen
+
+* Eure Reise soll sich lohnen. Deswegen ist es unser Anliegen, dass wir über die
+  Hochzeit hinaus eine Art Gruppenurlaub organisieren.
+* Für eure Anreise bucht ihr einen Flug in eine indische Großstadt,
+  höchstwahrscheinlich Delhi.
+* In Indien brauchen wir dann eine Weiterreise: entweder Flug oder Zug.
+* Ihr werdet 600 - 900 Euro Reisekosten haben.
+* Der Flug nach Indien dauert nicht ganz 10 Stunden.
+* Wartezeit in Delhi und Anschlussflug bzw. Anschlusszug mitgerechnet, ist mit
+  jeweils zwei Reisetagen für An- und Abreise zu rechnen.
+* Um nach Indien einzureisen, ist vor der Reise ein [eVisa](https://indianvisaonline.gov.in/evisa/tvoa.html) zu beantragen. Anträge werden innerhalb weniger
+  als einer Woche bearbeitet.
+* Es werden keine Pflichtimpfungen für die Einreise vorausgesetzt.
+* Hepatitis A/B Impfungen werden vom auswärtigen Amt empfohlen. Wer das wünscht,
+  sollte sich zwei Monate vor Abreise beim Hausarzt um die Impfungen (Mehrzahl!)
+  kümmern.
+`;
+      document.getElementById("content").innerHTML = marked.parse(md);
+    </script>
+  </body>
+</html>
