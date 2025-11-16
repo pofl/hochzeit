@@ -242,11 +242,12 @@ Das Wichtigste:
           }
 
           isTranslatedPage() {
-            // Check if we're on a translated version by Google Translate
-            // Google Translate adds classes to html element
+            // Check if we're on a translated version by examining the current URL
+            // Google Translate adds /translate to the URL or uses translate.google.com
+            const url = window.location.href;
             return (
-              document.documentElement.lang?.startsWith("en") ||
-              document.documentElement.className.includes("translated-ltr")
+              url.includes("translate.google.com") ||
+              url.includes("/translate")
             );
           }
 
