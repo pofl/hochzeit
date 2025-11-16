@@ -237,22 +237,13 @@ Das Wichtigste:
       <script>
         class TranslateButton extends HTMLElement {
           connectedCallback() {
-            // Only show on the original website, not on translated versions
-            if (!this.isTranslatedPage()) {
+            // Check if we're on a translated version by examining the current URL.
+            // Only show on the original website, not on translated versions.
+            if (!window.location.href.includes("translate")) {
               this.show();
             } else {
               this.hide();
             }
-          }
-
-          isTranslatedPage() {
-            // Check if we're on a translated version by examining the current URL
-            // Google Translate adds /translate to the URL or uses translate.google.com
-            const url = window.location.href;
-            return (
-              url.includes("translate.google.com") ||
-              url.includes("/translate")
-            );
           }
 
           show() {
