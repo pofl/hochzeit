@@ -65,6 +65,9 @@
       h3 {
         font-size: 1.25em;
       }
+      strong {
+        font-weight: 600;
+      }
       a {
         color: #ff7722;
         text-decoration: none;
@@ -107,8 +110,14 @@
 
       <style>
         #content {
-          strong {
-            font-weight: 600;
+          h1,
+          h2,
+          h3 {
+            &::before {
+              content: "↪";
+              padding-right: 0.3em;
+              color: #ff7722;
+            }
           }
 
           blockquote {
