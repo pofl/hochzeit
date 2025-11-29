@@ -40,6 +40,8 @@
         font-weight: 300;
         font-style: normal;
         font-variation-settings: "wdth" 100;
+
+        --highlight: #ff7722;
       }
       body {
         max-width: 35rem;
@@ -69,7 +71,7 @@
         font-weight: 600;
       }
       a {
-        color: #ff7722;
+        color: var(--highlight);
         text-decoration: none;
       }
     </style>
@@ -116,12 +118,12 @@
             &::before {
               content: "↪";
               padding-right: 0.3em;
-              color: #ff7722;
+              color: var(--highlight);
             }
           }
 
           blockquote {
-            border-left: 4px solid #ff7722;
+            border-left: 4px solid var(--highlight);
             margin-left: 0;
             margin-right: 0;
             padding-left: 1em;
