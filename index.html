@@ -42,6 +42,7 @@
         font-variation-settings: "wdth" 100;
 
         --highlight: #ff7722;
+        --bg-highlight: color-mix(in srgb, var(--highlight), white 85%);
       }
       body {
         max-width: 35rem;
@@ -73,6 +74,12 @@
       a {
         color: var(--highlight);
         text-decoration: none;
+      }
+      my-hl {
+        background-color: var(--bg-highlight);
+        padding: 2px 4px;
+        border-radius: 4px;
+        border-top: 1px color(from color srgb r g b);
       }
     </style>
   </head>
@@ -117,7 +124,7 @@
             margin-left: 0;
             margin-right: 0;
             padding: 0.5em 0.5em 0.5em 1em;
-            background-color: #fff0e7;
+            background-color: var(--bg-highlight);
             /* color: #666; */
             /* font-style: italic; */
 
@@ -212,7 +219,7 @@ Das Wichtigste:
           width: 56px;
           height: 56px;
           border-radius: 50%;
-          background-color: #ff7722;
+          background-color: var(--highlight);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           transition: all 0.3s ease;
           text-decoration: none;
