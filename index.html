@@ -116,11 +116,17 @@
             border-left: 4px solid var(--highlight);
             margin-left: 0;
             margin-right: 0;
-            padding-left: 1em;
-            padding-right: 0.5em;
+            padding: 0.5em 0.5em 0.5em 1em;
             background-color: #fff0e7;
             /* color: #666; */
             /* font-style: italic; */
+
+            & > *:first-child {
+              margin-top: 0;
+            }
+            & > *:last-child {
+              margin-bottom: 0;
+            }
           }
         }
       </style>
