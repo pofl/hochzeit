@@ -42,6 +42,7 @@
         font-variation-settings: "wdth" 100;
 
         --highlight: #ff7722;
+        --highlight-dark: #ff5500;
         --bg-highlight: color-mix(in srgb, var(--highlight), white 85%);
       }
       body {
@@ -72,8 +73,11 @@
         font-weight: 600;
       }
       a {
-        color: var(--highlight);
         text-decoration: none;
+        color: var(--highlight);
+        &:hover {
+          color: var(--highlight-dark);
+        }
       }
       my-hl {
         background-color: var(--bg-highlight);
@@ -223,10 +227,11 @@ Das Wichtigste:
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           transition: all 0.3s ease;
           text-decoration: none;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
         }
 
         translate-button a:hover {
-          background-color: #ff5500;
+          background-color: var(--highlight-dark);
           box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
           transform: scale(1.1);
         }
