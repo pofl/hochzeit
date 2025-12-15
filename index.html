@@ -173,6 +173,20 @@
                   transform: scale(1.05);
                 }
               }
+
+              &.secondary {
+                background: var(--bg-highlight);
+                /* color: #666; */
+                color: var(--highlight-dark);
+                font-weight: 400;
+                cursor: pointer;
+                transition: background 0.2s ease, transform 0.1s ease;
+
+                &:hover {
+                  background: color-mix(in srgb, var(--highlight), white 80%);
+                  transform: scale(1.05);
+                }
+              }
             }
 
             button.calendar-day {
@@ -221,24 +235,28 @@
           <div class="calendar-header">So</div>
 
           <!-- Woche 1: 4. - 10. Mai -->
-          <div class="calendar-day normal">4</div>
+          <button class="calendar-day secondary" popovertarget="pop-4">4</button>
           <button class="calendar-day event" popovertarget="pop-5">5</button>
           <button class="calendar-day event" popovertarget="pop-6">6</button>
           <button class="calendar-day event" popovertarget="pop-7">7</button>
-          <button class="calendar-day event" popovertarget="pop-8">8</button>
-          <div class="calendar-day weekend">9</div>
+          <button class="calendar-day secondary" popovertarget="pop-8">8</button>
+          <button class="calendar-day secondary" popovertarget="pop-9">9</button>
           <div class="calendar-day weekend">10</div>
 
           <!-- Woche 2: 11. - 17. Mai -->
           <div class="calendar-day normal">11</div>
           <div class="calendar-day normal">12</div>
           <div class="calendar-day normal">13</div>
-          <button class="calendar-day event" popovertarget="pop-14">14</button>
+          <button class="calendar-day secondary" popovertarget="pop-14">14</button>
           <div class="calendar-day normal">15</div>
           <div class="calendar-day weekend">16</div>
           <div class="calendar-day weekend">17</div>
         </div>
 
+        <div id="pop-4" popover class="event-popover">
+          <h4>4. Mai – Frühe Vögel</h4>
+          <p>Eigentlich haben wir die Zimmer erst ab Dienstag reserviert. Eine frühere Anreise ist wahrscheinlich möglich. Wir können das für euch mit dem Hotel klären.</p>
+        </div>
         <div id="pop-5" popover class="event-popover">
           <h4>5. Mai – Mehendi</h4>
           <p><a href="https://translate.google.com/translate?u=https%3A%2F%2Fwww.ptaufiqphotography.com%2Fmehndi-indian-wedding-tradition%2F" target="_blank">Mehendi</a>: Frauen tragen Henna (temporäre Tattoos) auf ihre Hände auf. Männer können auch mitmachen. Kein richtiges Event, keine Dekoration, findet nur im Zimmer statt. Dauert mehrere Stunden. Begrenzte Anzahl von Personen, da die meisten indischen Gäste erst am 6. ankommen.</p>
@@ -256,6 +274,10 @@
         <div id="pop-8" popover class="event-popover">
           <h4>8. Mai – Ausklang</h4>
           <p>Abschiedsfrühstück für alle Gäste. Checkout bis 12 Uhr. Option auf eine zusätzliche Übernachtung am Veranstaltungsort.</p>
+        </div>
+        <div id="pop-9" popover class="event-popover">
+          <h4>9. Mai – Verlängerung</h4>
+          <p>Eine weitere Nacht kann angehangen werden, falls dies für die Abreise besser passt.</p>
         </div>
         <div id="pop-14" popover class="event-popover">
           <h4>14. Mai – Christi Himmelfahrt</h4>
