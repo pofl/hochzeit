@@ -122,11 +122,11 @@
         </div>
       </my-header>
 
-      <my-calendar>
+      <template id="calendar-template">
         <style>
           my-calendar {
             display: block;
-            margin-bottom: 60px;
+            margin: 2em 0;
           }
           .calendar-grid {
             display: grid;
@@ -171,14 +171,6 @@
             background: var(--highlight-dark);
             transform: scale(1.05);
           }
-          .calendar-day.holiday {
-            background: #a8d5a2;
-            color: #2d5a27;
-            cursor: pointer;
-          }
-          .calendar-day.holiday:hover {
-            background: #8fc988;
-          }
           button.calendar-day {
             border: none;
             font-family: inherit;
@@ -192,6 +184,9 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
             max-width: 280px;
             font-size: 0.9em;
+          }
+          .event-popover::backdrop {
+            backdrop-filter: blur(4px);
           }
           .event-popover h4 {
             margin: 0 0 8px 0;
@@ -225,7 +220,7 @@
           <div class="calendar-day normal">11</div>
           <div class="calendar-day normal">12</div>
           <div class="calendar-day normal">13</div>
-          <button class="calendar-day holiday" popovertarget="pop-14">14</button>
+          <button class="calendar-day event" popovertarget="pop-14">14</button>
           <div class="calendar-day normal">15</div>
           <div class="calendar-day weekend">16</div>
           <div class="calendar-day weekend">17</div>
@@ -253,7 +248,7 @@
           <h4>14. Mai – Christi Himmelfahrt</h4>
           <p>Feiertag in Deutschland 🇩🇪<br>Ideal für verlängertes Wochenende oder Weiterreise in Indien!</p>
         </div>
-      </my-calendar>
+      </template>
 
       <style>
         #content {
@@ -297,6 +292,8 @@ Für uns Europäer wird diese traditionelle hinduistische Hochzeit ein einmalige
 Erlebnis voller Farben, Gerüche, Geschmäcker. Die Feierlichkeiten erstrecken
 sich über drei Tage. Eine kleine Warnung vorweg: Es wird kein Fleisch und keinen
 Alkohol geben.
+
+<my-calendar></my-calendar>
 
 Folgendes zum Ablauf:
 
@@ -417,6 +414,12 @@ Das Wichtigste:
 
 `;
       document.getElementById("content").innerHTML = marked.parse(md);
+
+      // Load calendar template into my-calendar elements
+      document.querySelectorAll('my-calendar').forEach(calendar => {
+        const template = document.getElementById('calendar-template');
+        calendar.appendChild(template.content.cloneNode(true));
+      });
     </script>
 
     <translate-button>
