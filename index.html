@@ -127,75 +127,88 @@
           my-calendar {
             display: block;
             margin: 2em 0;
-          }
-          .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            max-width: 100%;
-          }
-          .calendar-header {
-            text-align: center;
-            font-weight: 600;
-            padding: 8px 4px;
-            font-size: 0.85em;
-            color: #666;
-          }
-          .calendar-day {
-            text-align: center;
-            padding: 10px 4px;
-            border-radius: 8px;
-            font-size: 0.95em;
-            position: relative;
-          }
-          .calendar-day.empty {
-            background: transparent;
-          }
-          .calendar-day.normal {
-            background: #f5f5f5;
-            color: #666;
-          }
-          .calendar-day.weekend {
-            background: #e8e8e8;
-            color: #555;
-            font-weight: 400;
-          }
-          .calendar-day.event {
-            background: var(--highlight);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-          }
-          .calendar-day.event:hover {
-            background: var(--highlight-dark);
-            transform: scale(1.05);
-          }
-          button.calendar-day {
-            border: none;
-            font-family: inherit;
-            font-size: inherit;
-          }
-          .event-popover {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 12px 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            max-width: 280px;
-            font-size: 0.9em;
-          }
-          .event-popover::backdrop {
-            backdrop-filter: blur(4px);
-          }
-          .event-popover h4 {
-            margin: 0 0 8px 0;
-            font-family: "Playfair Display", serif;
-            color: var(--highlight-dark);
-          }
-          .event-popover p {
-            margin: 0;
-            line-height: 1.5;
+
+            .calendar-grid {
+              display: grid;
+              grid-template-columns: repeat(7, 1fr);
+              gap: 4px;
+              max-width: 100%;
+            }
+
+            .calendar-header {
+              text-align: center;
+              font-weight: 600;
+              padding: 8px 4px;
+              font-size: 0.85em;
+              color: #666;
+            }
+
+            .calendar-day {
+              text-align: center;
+              padding: 10px 4px;
+              border-radius: 8px;
+              font-size: 0.95em;
+              position: relative;
+
+              &.empty {
+                background: transparent;
+              }
+
+              &.normal {
+                background: #f5f5f5;
+                color: #666;
+              }
+
+              &.weekend {
+                background: #e8e8e8;
+                color: #555;
+                font-weight: 400;
+              }
+
+              &.event {
+                background: var(--highlight);
+                color: white;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.2s ease, transform 0.1s ease;
+
+                &:hover {
+                  background: var(--highlight-dark);
+                  transform: scale(1.05);
+                }
+              }
+            }
+
+            button.calendar-day {
+              border: none;
+              font-family: inherit;
+              font-size: inherit;
+            }
+
+            .event-popover {
+              background: white;
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              padding: 12px 16px;
+              box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+              max-width: 280px;
+              font-size: 0.9em;
+
+              &::backdrop {
+                backdrop-filter: blur(4px);
+              }
+
+              h4 {
+                margin: 0 0 8px 0;
+                font-family: "Playfair Display", serif;
+                color: var(--highlight-dark);
+              }
+
+              p {
+                margin: 0;
+                line-height: 1.5;
+              }
+            }
           }
         </style>
         <div class="calendar-grid">
