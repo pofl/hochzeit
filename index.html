@@ -44,13 +44,13 @@
         font-style: normal;
       }
       h1 {
-        font-size: 1.75em;
+        font-size: 1.75rem;
       }
       h2 {
-        font-size: 1.5em;
+        font-size: 1.5rem;
       }
       h3 {
-        font-size: 1.25em;
+        font-size: 1.25rem;
       }
       strong {
         font-weight: 600;
@@ -150,10 +150,6 @@
               font-size: 0.95em;
               position: relative;
 
-              &.empty {
-                background: transparent;
-              }
-
               &.normal {
                 background: #f5f5f5;
                 color: #666;
@@ -195,12 +191,16 @@
               font-size: 0.9em;
 
               &::backdrop {
+                background-color: rgba(256, 256, 256, 0.25);
                 backdrop-filter: blur(4px);
               }
 
               h4 {
-                margin: 0 0 8px 0;
+                margin: 0 0 .5rem 0;
                 font-family: "Playfair Display", serif;
+                /* font-family: "DM Sans", serif; */
+                /* font-weight: 400; */
+                font-size: 1.15em;
                 color: var(--highlight-dark);
               }
 
@@ -308,8 +308,6 @@ Alkohol geben.
 
 <my-calendar></my-calendar>
 
-<img src="wedding.avif" width="100%" style="aspect-ratio: 1024/393;" alt="Indian wedding" />
-
 Dress-Code:
 
 * Haldi: traditionelle indische Kleidung.
@@ -363,6 +361,8 @@ führt.
 Unsere Hochzeit fällt außerhalb der Monsunzeit (Juni bis Oktober). Dennoch
 solltet ihr euch auf gelegentlichen Regenfall einstellen. Die Temperaturen im
 Mai bewegen sich zwischen 21°C und 33°C.
+
+<img src="wedding.avif" width="100%" style="aspect-ratio: 1024/393;" alt="Indian wedding" />
 
 ## Anreise und Unterkunft
 
