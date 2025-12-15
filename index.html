@@ -122,6 +122,139 @@
         </div>
       </my-header>
 
+      <my-calendar>
+        <style>
+          my-calendar {
+            display: block;
+            margin-bottom: 60px;
+          }
+          .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            max-width: 100%;
+          }
+          .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 8px 4px;
+            font-size: 0.85em;
+            color: #666;
+          }
+          .calendar-day {
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            position: relative;
+          }
+          .calendar-day.empty {
+            background: transparent;
+          }
+          .calendar-day.normal {
+            background: #f5f5f5;
+            color: #666;
+          }
+          .calendar-day.weekend {
+            background: #e8e8e8;
+            color: #555;
+            font-weight: 400;
+          }
+          .calendar-day.event {
+            background: var(--highlight);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+          }
+          .calendar-day.event:hover {
+            background: var(--highlight-dark);
+            transform: scale(1.05);
+          }
+          .calendar-day.holiday {
+            background: #a8d5a2;
+            color: #2d5a27;
+            cursor: pointer;
+          }
+          .calendar-day.holiday:hover {
+            background: #8fc988;
+          }
+          button.calendar-day {
+            border: none;
+            font-family: inherit;
+            font-size: inherit;
+          }
+          .event-popover {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            max-width: 280px;
+            font-size: 0.9em;
+          }
+          .event-popover h4 {
+            margin: 0 0 8px 0;
+            font-family: "Playfair Display", serif;
+            color: var(--highlight-dark);
+          }
+          .event-popover p {
+            margin: 0;
+            line-height: 1.5;
+          }
+        </style>
+        <div class="calendar-grid">
+          <div class="calendar-header">Mo</div>
+          <div class="calendar-header">Di</div>
+          <div class="calendar-header">Mi</div>
+          <div class="calendar-header">Do</div>
+          <div class="calendar-header">Fr</div>
+          <div class="calendar-header">Sa</div>
+          <div class="calendar-header">So</div>
+
+          <!-- Woche 1: 4. - 10. Mai -->
+          <div class="calendar-day normal">4</div>
+          <button class="calendar-day event" popovertarget="pop-5">5</button>
+          <button class="calendar-day event" popovertarget="pop-6">6</button>
+          <button class="calendar-day event" popovertarget="pop-7">7</button>
+          <button class="calendar-day event" popovertarget="pop-8">8</button>
+          <div class="calendar-day weekend">9</div>
+          <div class="calendar-day weekend">10</div>
+
+          <!-- Woche 2: 11. - 17. Mai -->
+          <div class="calendar-day normal">11</div>
+          <div class="calendar-day normal">12</div>
+          <div class="calendar-day normal">13</div>
+          <button class="calendar-day holiday" popovertarget="pop-14">14</button>
+          <div class="calendar-day normal">15</div>
+          <div class="calendar-day weekend">16</div>
+          <div class="calendar-day weekend">17</div>
+        </div>
+
+        <div id="pop-5" popover class="event-popover">
+          <h4>5. Mai – Mehendi</h4>
+          <p>Frauen tragen Henna (temporäre Tattoos) auf ihre Hände auf. Männer können auch mitmachen. Dauert mehrere Stunden.</p>
+        </div>
+        <div id="pop-6" popover class="event-popover">
+          <h4>6. Mai – Haldi & Sangeet</h4>
+          <p><strong>Morgens/Nachmittags:</strong> Haldi-Zeremonie – Kurkumapaste wird aufgetragen. Lockere Veranstaltung mit Musik, Essen und Spielen.</p>
+          <p style="margin-top: 8px;"><strong>Abends:</strong> Sangeet – Musikalischer Abend mit Tanzaufführungen. Ringtausch findet statt.</p>
+        </div>
+        <div id="pop-7" popover class="event-popover">
+          <h4>7. Mai – Haupt-Hochzeit</h4>
+          <p><strong>Morgens:</strong> Kleinere traditionelle Rituale in familiärer Runde.</p>
+          <p style="margin-top: 8px;"><strong>Abends:</strong> Haupt-Hochzeitszeremonie mit Varamala (Girlandentausch) und Phera (Feuerritual). Anschließend großes Festessen.</p>
+        </div>
+        <div id="pop-8" popover class="event-popover">
+          <h4>8. Mai – Abreise</h4>
+          <p>Abschiedsfrühstück für alle Gäste. Checkout bis 12 Uhr. Option auf eine zusätzliche Übernachtung.</p>
+        </div>
+        <div id="pop-14" popover class="event-popover">
+          <h4>14. Mai – Christi Himmelfahrt</h4>
+          <p>Feiertag in Deutschland 🇩🇪<br>Ideal für verlängertes Wochenende oder Weiterreise in Indien!</p>
+        </div>
+      </my-calendar>
+
       <style>
         #content {
           blockquote {
@@ -187,9 +320,9 @@ Folgendes zum Ablauf:
 * Am 7. Abends: Haupt-Hochzeitszeremonie in der zweiten Tageshälfte. Formelle
   Veranstaltung. Braut und Bräutigam tragen traditionelle Kleidung.
   [Varamala](https://translate.google.com/translate?u=https%3A%2F%2Fwww.ptaufiqphotography.com%2Fvarmala-indian-wedding-tradition%2F)
-  und
+  (Girlandentausch) und
   [Phera](https://translate.google.com/translate?u=https%3A%2F%2Fwww.weddingbazaar.com%2Fblog%2Fphera-ceremony-photos)
-  sowie mehrere weitere Rituale. Anschließend großes Festessen.
+  (Feuerritual) sowie mehrere weitere Rituale. Anschließend großes Festessen.
 * Am 8.: Abschiedsfrühstück für alle Gäste. Checkout bis 12 Uhr. Option auf eine
   zusätzliche Übernachtung am Veranstaltungsort.
 
@@ -272,7 +405,8 @@ Das Wichtigste:
 
 * Ihr braucht einen Reisepass. Der deutsche Personalausweis genügt nicht. Um
   einen Reisepass zu beantragen, müsst ihr unter anderem eure Abstammungsurkunde
-  / Geburtsurkunde vorzeigen.
+  / Geburtsurkunde vorzeigen. Die Ausstellung eines Reisepasses kann bis zu acht
+  Wochen dauern.
 * Um nach Indien einzureisen, ist vor der Reise ein
   [eVisa](https://indianvisaonline.gov.in/evisa/tvoa.html) zu beantragen.
   Anträge werden innerhalb weniger als einer Woche bearbeitet.
