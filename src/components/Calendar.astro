@@ -1,0 +1,213 @@
+---
+---
+
+<div class="calendar">
+  <div class="calendar-grid">
+    <div class="calendar-header">Mo</div>
+    <div class="calendar-header">Di</div>
+    <div class="calendar-header">Mi</div>
+    <div class="calendar-header">Do</div>
+    <div class="calendar-header">Fr</div>
+    <div class="calendar-header">Sa</div>
+    <div class="calendar-header">So</div>
+
+    <!-- Woche 1: 4. - 10. Mai -->
+    <button class="calendar-day secondary" popovertarget="pop-4">4</button>
+    <button class="calendar-day event" popovertarget="pop-5">5</button>
+    <button class="calendar-day event" popovertarget="pop-6">6</button>
+    <button class="calendar-day event" popovertarget="pop-7">7</button>
+    <button class="calendar-day secondary" popovertarget="pop-8">8</button>
+    <button class="calendar-day secondary" popovertarget="pop-9">9</button>
+    <div class="calendar-day weekend">10</div>
+
+    <!-- Woche 2: 11. - 17. Mai -->
+    <div class="calendar-day normal">11</div>
+    <div class="calendar-day normal">12</div>
+    <div class="calendar-day normal">13</div>
+    <button class="calendar-day secondary" popovertarget="pop-14">14</button>
+    <div class="calendar-day normal">15</div>
+    <div class="calendar-day weekend">16</div>
+    <div class="calendar-day weekend">17</div>
+  </div>
+
+  <div id="pop-4" popover class="event-popover">
+    <h4>4. Mai – Frühe Vögel</h4>
+    <p>
+      Eigentlich haben wir die Zimmer erst ab Dienstag reserviert. Eine frühere Anreise ist wahrscheinlich
+      möglich. Wir können das für euch mit dem Hotel klären.
+    </p>
+  </div>
+  <div id="pop-5" popover class="event-popover">
+    <h4>5. Mai – Mehendi</h4>
+    <p>
+      <a
+        href="https://translate.google.com/translate?u=https%3A%2F%2Fwww.ptaufiqphotography.com%2Fmehndi-indian-wedding-tradition%2F"
+        target="_blank"
+        >Mehendi</a
+      >: Frauen tragen Henna (temporäre Tattoos) auf ihre Hände auf. Männer können auch mitmachen. Kein richtiges
+      Event, keine Dekoration, findet nur im Zimmer statt. Dauert mehrere Stunden. Begrenzte Anzahl von Personen,
+      da die meisten indischen Gäste erst am 6. ankommen.
+    </p>
+  </div>
+  <div id="pop-6" popover class="event-popover">
+    <h4>6. Mai – Haldi & Sangeet</h4>
+    <p>
+      <strong>Morgens/Nachmittags:</strong>
+      <a
+        href="https://translate.google.com/translate?u=https%3A%2F%2Fwhatisheybailsdoing.com%2Fhaldi-ceremony-explained%2F"
+        target="_blank"
+        >Haldi-Zeremonie</a
+      >. Der Braut und dem Bräutigam wird von Familie und Freunden Kurkumapaste aufgetragen. Lockere
+      Veranstaltung. Musik, Essen, einige Spiele.
+    </p>
+    <p style="margin-top: 8px">
+      <strong>Nach Sonnenuntergang:</strong> Musikalischer Abend Sangeet
+      <a
+        href="https://translate.google.com/translate?u=https%3A%2F%2Fwww.ptaufiqphotography.com%2Fsangeet-indian-wedding-tradition%2F"
+        target="_blank"
+        >[1]</a
+      >
+      <a
+        href="https://translate.google.com/translate?u=https%3A%2F%2Fdgassphotography.com%2Fsangeet-ceremony%2F"
+        target="_blank"
+        >[2]</a
+      >. Tanzaufführungen von Familie und Freunden. Essen und Getränke werden serviert. Halb-formelle
+      Veranstaltung. Ringtausch findet statt.
+    </p>
+  </div>
+  <div id="pop-7" popover class="event-popover">
+    <h4>7. Mai – Haupt-Hochzeit</h4>
+    <p><strong>Morgens:</strong> Einige kleinere traditionelle Rituale in engerer familiärer Runde.</p>
+    <p style="margin-top: 8px">
+      <strong>Abends:</strong> Haupt-Hochzeitszeremonie in der zweiten Tageshälfte. Formelle Veranstaltung. Braut
+      und Bräutigam tragen traditionelle Kleidung.
+      <a
+        href="https://translate.google.com/translate?u=https%3A%2F%2Fwww.ptaufiqphotography.com%2Fvarmala-indian-wedding-tradition%2F"
+        target="_blank"
+        >Varamala</a
+      >
+      (Girlandentausch) und
+      <a
+        href="https://translate.google.com/translate?u=https%3A%2F%2Fwww.weddingbazaar.com%2Fblog%2Fphera-ceremony-photos"
+        target="_blank"
+        >Phera</a
+      >
+      (Feuerritual) sowie mehrere weitere Rituale. Anschließend großes Festessen.
+    </p>
+  </div>
+  <div id="pop-8" popover class="event-popover">
+    <h4>8. Mai – Ausklang</h4>
+    <p>
+      Abschiedsfrühstück für alle Gäste. Checkout bis 12 Uhr. Option auf eine zusätzliche Übernachtung am
+      Veranstaltungsort.
+    </p>
+  </div>
+  <div id="pop-9" popover class="event-popover">
+    <h4>9. Mai – Verlängerung</h4>
+    <p>Eine weitere Nacht kann angehangen werden, falls dies für die Abreise besser passt.</p>
+  </div>
+  <div id="pop-14" popover class="event-popover">
+    <h4>14. Mai – Christi Himmelfahrt</h4>
+    <p>Feiertag in 🇩🇪 Deutschland! Nutzt dies doch um mit uns noch eine Woche Urlaub zu machen 😊</p>
+  </div>
+</div>
+
+<style>
+  .calendar {
+    display: block;
+    margin: 2em 0;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    max-width: 100%;
+  }
+
+  .calendar-header {
+    text-align: center;
+    font-weight: 600;
+    padding: 8px 4px;
+    font-size: 0.85em;
+    color: #666;
+  }
+
+  .calendar-day {
+    text-align: center;
+    padding: 10px 4px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    position: relative;
+
+    &.normal {
+      background: #f5f5f5;
+      color: #666;
+    }
+
+    &.weekend {
+      background: #e8e8e8;
+      color: #555;
+      font-weight: 400;
+    }
+
+    &.event {
+      background: var(--highlight);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+
+      &:hover {
+        background: var(--highlight-dark);
+        transform: scale(1.05);
+      }
+    }
+
+    &.secondary {
+      background: var(--bg-highlight);
+      color: var(--highlight-dark);
+      font-weight: 400;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+
+      &:hover {
+        background: color-mix(in srgb, var(--highlight), white 80%);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  button.calendar-day {
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  .event-popover {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    max-width: 280px;
+    font-size: 0.9em;
+
+    &::backdrop {
+      background-color: rgba(256, 256, 256, 0.25);
+      backdrop-filter: blur(4px);
+    }
+
+    h4 {
+      margin: 0 0 0.5rem 0;
+      font-family: "Playfair Display", serif;
+      font-size: 1.15em;
+      color: var(--highlight-dark);
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+</style>
