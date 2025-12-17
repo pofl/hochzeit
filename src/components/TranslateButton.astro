@@ -1,0 +1,75 @@
+---
+---
+
+<div class="translate-button">
+  <a
+    href="https://translate.google.com/translate?u=https%3A%2F%2Fhochzeit.fpolster.dev&sl=de&tl=en"
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Translate to English"
+  >
+    <span class="label">en</span>
+  </a>
+</div>
+
+<style>
+  .translate-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+  }
+
+  .translate-button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--highlight);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .translate-button a:hover {
+    background-color: var(--highlight-dark);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .translate-button a:active {
+    transform: scale(0.95);
+  }
+
+  .label {
+    color: white;
+    font-weight: bold;
+  }
+
+  @media (max-width: 600px) {
+    .translate-button {
+      bottom: 20px;
+      right: 20px;
+    }
+
+    .translate-button a {
+      width: 48px;
+      height: 48px;
+    }
+  }
+</style>
+
+<script>
+  // Check if we're on a translated version by examining the current URL.
+  // Only show on the original website, not on translated versions.
+  const button = document.querySelector('.translate-button') as HTMLElement;
+  if (button) {
+    if (window.location.href.includes("translate")) {
+      button.style.display = "none";
+    } else {
+      button.style.display = "block";
+    }
+  }
+</script>
