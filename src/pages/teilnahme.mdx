@@ -1,0 +1,45 @@
+---
+layout: ../layouts/Layout.astro
+title: Shruti und Flo heiraten
+---
+
+import Header from "../components/Header.astro";
+import PeopleTable from "../components/PeopleTable.astro";
+
+export const guestDocs = [
+	{
+		name: "Shruti Nair",
+		teilnahme: "Bestätigt",
+		reisepass: "Aktueller indischer Pass (Seite 1-2 gescannt)",
+		geburtsurkunde: "Digitale Kopie hinterlegt",
+		eVisa: "Nicht erforderlich"
+	},
+	{
+		name: "Florian Koller",
+		teilnahme: "Bestätigt",
+		reisepass: "Deutschland, gilt bis 2028",
+		geburtsurkunde: "Sofort verfügbar",
+		eVisa: "Beantragt (Referenz 2098-AV)"
+	},
+	{
+		name: "Harish & Tania Patel",
+		teilnahme: "Warten auf Zubringer",
+		reisepass: "Beide gültig, Kopien erhalten",
+		geburtsurkunde: "Tania digital, Harish wird nachgereicht",
+		eVisa: "Beantragung in Progress"
+	},
+];
+
+<Header />
+
+<main>
+	<section class="intro">
+		<h1>Teilnahme &amp; Reisedokumente</h1>
+		<p>
+			Die Tabelle listet den aktuellen Stand zu Teilnahme, Reisepass, Geburtsurkunde und eVisa
+			für unsere Gäste.
+		</p>
+	</section>
+
+	<PeopleTable people={guestDocs} />
+</main>
