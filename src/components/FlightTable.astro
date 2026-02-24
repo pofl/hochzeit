@@ -39,6 +39,41 @@ const getAirportsFromRoute = (route: FlightSegment[]) => {
   return codes;
 };
 
+const formatTimestamp = (timestamp: string) => {
+  const match = timestamp.match(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2})?(Z|[+-]\d{2}:\d{2})$/
+  );
+
+  if (!match) {
+    return timestamp;
+  }
+
+  const [, year, month, day, hour, minute, offset] = match;
+  const offsetLabel = offset === "Z" ? "UTC+00:00" : `UTC${offset}`;
+
+  return `${day}.${month}.${year}, ${hour}:${minute} (${offsetLabel})`;
+};
+
+const formatDuration = (milliseconds: number) => {
+  if (!Number.isFinite(milliseconds) || milliseconds < 0) {
+    return "-";
+  }
+
+  const totalMinutes = Math.round(milliseconds / 60000);
+  const days = Math.floor(totalMinutes / (24 * 60));
+  const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+  const minutes = totalMinutes % 60;
+  const dayPart = days > 0 ? `${days}d ` : "";
+
+  return `${dayPart}${hours}h ${minutes}m`;
+};
+
+const getDurationBetween = (start: string, end: string) => {
+  const startTime = new Date(start).getTime();
+  const endTime = new Date(end).getTime();
+  return formatDuration(endTime - startTime);
+};
+
 const getDepartureFromRoute = (route: FlightSegment[]) => route[0]?.departure ?? "-";
 
 const getArrivalFromRoute = (route: FlightSegment[]) => route.at(-1)?.arrival ?? "-";
@@ -50,8 +85,8 @@ const flights: FlightConnection[] = [
       {
         from: "MUC",
         to: "BLR",
-        departure: "02.05.2026, 12:05",
-        arrival: "03.05.2026, 00:25",
+        departure: "2026-05-02T12:05:00+02:00",
+        arrival: "2026-05-03T00:25:00+05:30",
         flightNumber: "Lufthansa LH764"
       }
     ]
@@ -62,15 +97,15 @@ const flights: FlightConnection[] = [
       {
         from: "FRA",
         to: "DXB",
-        departure: "02.05.2026, 14:45",
-        arrival: "02.05.2026, 23:30",
+        departure: "2026-05-02T14:45:00+02:00",
+        arrival: "2026-05-02T23:30:00+04:00",
         flightNumber: "Emirates EK46"
       },
       {
         from: "DXB",
         to: "BLR",
-        departure: "03.05.2026, 03:40",
-        arrival: "03.05.2026, 08:20",
+        departure: "2026-05-03T03:40:00+04:00",
+        arrival: "2026-05-03T08:20:00+05:30",
         flightNumber: "Emirates EK564"
       }
     ]
@@ -88,18 +123,29 @@ const flights: FlightConnection[] = [
             <strong>Flughäfen:</strong>
             {getAirportsFromRoute(flight.route).map(formatAirport).join(" → ")}
           </p>
-          <p><strong>Start:</strong> {getDepartureFromRoute(flight.route)}</p>
-          <p><strong>Ziel:</strong> {getArrivalFromRoute(flight.route)}</p>
+          <p><strong>Start:</strong> {formatTimestamp(getDepartureFromRoute(flight.route))}</p>
+          <p><strong>Ziel:</strong> {formatTimestamp(getArrivalFromRoute(flight.route))}</p>
         </div>
       </summary>
 
       <ol class="route-list" aria-label="Detaillierte Flugroute">
-        {flight.route.map((segment) => (
+        {flight.route.map((segment, index) => (
           <li>
             <p class="segment-route">{formatAirport(segment.from)} → {formatAirport(segment.to)}</p>
-            <p class="segment-time">{segment.departure} → {segment.arrival}</p>
+            <p class="segment-time">
+              {formatTimestamp(segment.departure)} → {formatTimestamp(segment.arrival)}
+            </p>
+            <p class="segment-duration">
+              Flugdauer: {getDurationBetween(segment.departure, segment.arrival)}
+            </p>
             {segment.flightNumber && (
               <p class="segment-flight">Flug: {segment.flightNumber}</p>
+            )}
+
+            {flight.route[index + 1] && (
+              <p class="layover-time">
+                Umstieg in {formatAirport(segment.to)}: {getDurationBetween(segment.arrival, flight.route[index + 1].departure)}
+              </p>
             )}
           </li>
         ))}
@@ -176,6 +222,8 @@ const flights: FlightConnection[] = [
 
         .segment-route,
         .segment-time,
+        .segment-duration,
+        .layover-time,
         .segment-flight {
           margin: 0;
         }
@@ -185,8 +233,19 @@ const flights: FlightConnection[] = [
         }
 
         .segment-time,
+        .segment-duration,
+        .layover-time,
         .segment-flight {
           font-size: 0.9rem;
+        }
+
+        .segment-duration {
+          color: #5f5f5f;
+        }
+
+        .layover-time {
+          color: #6b4a2b;
+          font-weight: 600;
         }
 
         .segment-flight {
@@ -211,6 +270,8 @@ const flights: FlightConnection[] = [
 
         .summary-grid p,
         .route-list .segment-time,
+        .route-list .segment-duration,
+        .route-list .layover-time,
         .route-list .segment-flight {
           font-size: 0.85rem;
         }
