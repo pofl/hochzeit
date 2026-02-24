@@ -13,6 +13,7 @@ interface FlightConnection {
 }
 
 const airportCityByCode: Record<string, string> = {
+  DRS: "Dresden",
   MUC: "München",
   FRA: "Frankfurt",
   DXB: "Dubai",
@@ -80,33 +81,40 @@ const getArrivalFromRoute = (route: FlightSegment[]) => route.at(-1)?.arrival ??
 
 const flights: FlightConnection[] = [
   {
-    guests: ["Anna", "Tobias"],
+    guests: ["Marie", "Robert"],
     route: [
       {
-        from: "MUC",
+        from: "DRS",
+        to: "FRA",
+        departure: "2026-05-02T10:35:00+02:00",
+        arrival: "2026-05-02T11:40:00+02:00",
+        flightNumber: "Lufthansa LH63"
+      },
+      {
+        from: "FRA",
         to: "BLR",
-        departure: "2026-05-02T12:05:00+02:00",
-        arrival: "2026-05-03T00:25:00+05:30",
-        flightNumber: "Lufthansa LH764"
+        departure: "2026-05-02T12:50:00+02:00",
+        arrival: "2026-05-03T01:20:00+05:30",
+        flightNumber: "Lufthansa LH754"
       }
     ]
   },
   {
-    guests: ["Lea", "David"],
+    guests: ["Ulrike", "André", "Basti", "Christin"],
     route: [
       {
-        from: "FRA",
-        to: "DXB",
-        departure: "2026-05-02T14:45:00+02:00",
-        arrival: "2026-05-02T23:30:00+04:00",
-        flightNumber: "Emirates EK46"
+        from: "DRS",
+        to: "MUC",
+        departure: "2026-05-02T09:35:00+02:00",
+        arrival: "2026-05-02T10:30:00+02:00",
+        flightNumber: "Lufthansa LH2123"
       },
       {
-        from: "DXB",
+        from: "MUC",
         to: "BLR",
-        departure: "2026-05-03T03:40:00+04:00",
-        arrival: "2026-05-03T08:20:00+05:30",
-        flightNumber: "Emirates EK564"
+        departure: "2026-05-02T12:05:00+02:00",
+        arrival: "2026-05-03T00:30:00+05:30",
+        flightNumber: "Lufthansa LH764"
       }
     ]
   }
@@ -122,9 +130,9 @@ const flights: FlightConnection[] = [
             <strong>Flughäfen:</strong>
             {getAirportsFromRoute(flight.route).map(formatAirport).join(" → ")}
           </p>
+          <p><strong>Reisende:</strong> {flight.guests.join(", ")}</p>
           <p><strong>Start:</strong> {formatTimestamp(getDepartureFromRoute(flight.route))}</p>
           <p><strong>Ziel:</strong> {formatTimestamp(getArrivalFromRoute(flight.route))}</p>
-          <p><strong>Gäste:</strong> {flight.guests.join(", ")}</p>
         </div>
       </summary>
 
