@@ -7,12 +7,33 @@ import { Image } from "astro:assets";
 import bengaluruImage from "../assets/bengaluru.avif";
 import weddingImage from "../assets/wedding.avif";
 import Calendar from "../components/Calendar.astro";
+import FlightTable from "../components/FlightTable.astro";
 import Header from "../components/Header.astro";
 import TranslateButton from "../components/TranslateButton.astro";
 
+export const bookedFlights = [
+  {
+    guests: "Anna & Tobias",
+    route: "München → Bengaluru",
+    departure: "02.05.2026, 12:05",
+    arrival: "03.05.2026, 00:25",
+    type: "Direktflug",
+    details: "Lufthansa LH764"
+  },
+  {
+    guests: "Lea & David",
+    route: "Frankfurt → Dubai → Bengaluru",
+    departure: "02.05.2026, 14:45",
+    arrival: "03.05.2026, 08:20",
+    type: "1 Umstieg",
+    details: "Emirates EK46 + EK564"
+  }
+];
+
 <Header />
 
-<main class="prose">
+<main>
+<section class="prose">
 
 Wir wollen im Mai 2026 in Indien heiraten. Es soll im Sommer auch eine Feier in
 Deutschland geben, aber die indische Hochzeit ist das Haupt-Event. Ihr seid
@@ -120,6 +141,19 @@ Es gibt Direktflüge von deutschen Flughäfen nach Bengaluru.
 Wir würden gerne die Buchung der Flüge und Hotels koordinieren, damit wir als
 Gruppe reisen können.
 
+### Bereits gebuchte Flüge
+
+Damit sich alle an ähnlichen Verbindungen orientieren können, listen wir hier
+bereits gebuchte Flüge. Die Liste wird laufend ergänzt.
+
+</section>
+
+<div style="width: 100%; max-width: 72rem; margin: 0 auto;">
+  <FlightTable flights={bookedFlights} />
+</div>
+
+<section class="prose">
+
 <div style="display: flex; justify-content: center; margin: 2em 0;">
   <iframe
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.3263768241645!2d77.58130667577564!3d13.141801187189404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae19000bf4e111%3A0x3cfd58a3e012abc!2sVanya%20Luxury%20Boutique%20Resort!5e0!3m2!1sde!2sde!4v1765912893101!5m2!1sde!2sde"
@@ -150,6 +184,8 @@ Das Wichtigste:
 - Hepatitis A/B Impfungen werden vom auswärtigen Amt empfohlen. Wer das wünscht,
   sollte sich zwei Monate vor Abreise beim Hausarzt um die Impfungen (Mehrzahl!)
   kümmern. Da dies eine Reiseimpfung ist, erstattet die Krankenkasse die Kosten.
+
+</section>
 
 </main>
 
