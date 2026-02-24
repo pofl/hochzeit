@@ -118,13 +118,13 @@ const flights: FlightConnection[] = [
     <details class="connection-item">
       <summary>
         <div class="summary-grid">
-          <p><strong>Gäste:</strong> {flight.guests.join(", ")}</p>
           <p>
             <strong>Flughäfen:</strong>
             {getAirportsFromRoute(flight.route).map(formatAirport).join(" → ")}
           </p>
           <p><strong>Start:</strong> {formatTimestamp(getDepartureFromRoute(flight.route))}</p>
           <p><strong>Ziel:</strong> {formatTimestamp(getArrivalFromRoute(flight.route))}</p>
+          <p><strong>Gäste:</strong> {flight.guests.join(", ")}</p>
         </div>
       </summary>
 
@@ -165,7 +165,7 @@ const flights: FlightConnection[] = [
     .connection-item {
       border-radius: .5rem;
       background: #f9f6f1;
-      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       overflow: hidden;
 
       &[open] summary {
