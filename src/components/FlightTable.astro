@@ -180,15 +180,14 @@ const flights: FlightConnection[] = [
         background: #f5efe7;
       }
 
-      &:focus-within {
-        outline: 2px solid rgba(161, 91, 0, 0.3);
-        outline-offset: 1px;
-      }
-
       summary {
         list-style: none;
         cursor: pointer;
         padding: 0.9rem 1rem;
+
+        @media (max-width: 640px) {
+          padding: 0.75rem;
+        }
 
         &::-webkit-details-marker {
           display: none;
@@ -205,10 +204,22 @@ const flights: FlightConnection[] = [
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.45rem 1rem;
+        font-size: 0.95rem;
+
+        @media (max-width: 740px) {
+          grid-template-columns: 1fr;
+        }
+
+        @media (max-width: 640px) {
+          font-size: 0.85rem;
+        }
 
         p {
           margin: 0;
-          font-size: 0.95rem;
+
+          @media (max-width: 440px) {
+            line-height: 1.4;
+          }
         }
       }
 
@@ -217,6 +228,16 @@ const flights: FlightConnection[] = [
         padding: 0.4rem 1.2rem 1rem 2.1rem;
         border-top: 1px solid rgba(0, 0, 0, 0.08);
         background: #fff;
+        font-size: 0.9rem;
+
+        @media (max-width: 640px) {
+          font-size: 0.85rem;
+          padding: 0.35rem 0.85rem 0.85rem 1.65rem;
+        }
+
+        @media (max-width: 440px) {
+          padding-left: 1.4rem;
+        }
 
         li {
           padding: 0.5rem 0;
@@ -228,23 +249,12 @@ const flights: FlightConnection[] = [
           }
         }
 
-        .segment-route,
-        .segment-time,
-        .segment-duration,
-        .layover-time,
-        .segment-flight {
+        :is(.segment-route, .segment-time, .segment-duration, .layover-time, .segment-flight) {
           margin: 0;
         }
 
         .segment-route {
           font-weight: 600;
-        }
-
-        .segment-time,
-        .segment-duration,
-        .layover-time,
-        .segment-flight {
-          font-size: 0.9rem;
         }
 
         .segment-duration {
@@ -258,46 +268,6 @@ const flights: FlightConnection[] = [
 
         .segment-flight {
           color: #a15b00;
-        }
-      }
-    }
-
-    @media (max-width: 740px) {
-      .connection-item {
-        .summary-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    }
-
-    @media (max-width: 640px) {
-      .connection-item {
-        summary {
-          padding: 0.75rem;
-        }
-
-        .summary-grid p,
-        .route-list .segment-time,
-        .route-list .segment-duration,
-        .route-list .layover-time,
-        .route-list .segment-flight {
-          font-size: 0.85rem;
-        }
-
-        .route-list {
-          padding: 0.35rem 0.85rem 0.85rem 1.65rem;
-        }
-      }
-    }
-
-    @media (max-width: 440px) {
-      .connection-item {
-        .summary-grid p {
-          line-height: 1.4;
-        }
-
-        .route-list {
-          padding-left: 1.4rem;
         }
       }
     }
