@@ -1,97 +1,236 @@
 ---
-interface Flight {
-  guests: string;
-  route: string;
+interface FlightSegment {
+  from: string;
+  to: string;
   departure: string;
   arrival: string;
-  type: "Direktflug" | "1 Umstieg" | "2 Umstiege";
-  details: string;
+  flightNumber?: string;
 }
 
-interface Props {
-  flights: Flight[];
+interface FlightConnection {
+  guests: string[];
+  route: FlightSegment[];
 }
 
-const { flights } = Astro.props;
-const headers = ["Gäste", "Strecke", "Abflug", "Ankunft", "Verbindung", "Details"];
+const airportCityByCode: Record<string, string> = {
+  MUC: "München",
+  FRA: "Frankfurt",
+  DXB: "Dubai",
+  BLR: "Bengaluru"
+};
+
+const formatAirport = (code: string) => {
+  const city = airportCityByCode[code];
+  return city ? `${city} (${code})` : code;
+};
+
+const getAirportsFromRoute = (route: FlightSegment[]) => {
+  const codes: string[] = [];
+
+  route.forEach((segment) => {
+    if (!codes.includes(segment.from)) {
+      codes.push(segment.from);
+    }
+    if (!codes.includes(segment.to)) {
+      codes.push(segment.to);
+    }
+  });
+
+  return codes;
+};
+
+const getDepartureFromRoute = (route: FlightSegment[]) => route[0]?.departure ?? "-";
+
+const getArrivalFromRoute = (route: FlightSegment[]) => route.at(-1)?.arrival ?? "-";
+
+const flights: FlightConnection[] = [
+  {
+    guests: ["Anna", "Tobias"],
+    route: [
+      {
+        from: "MUC",
+        to: "BLR",
+        departure: "02.05.2026, 12:05",
+        arrival: "03.05.2026, 00:25",
+        flightNumber: "Lufthansa LH764"
+      }
+    ]
+  },
+  {
+    guests: ["Lea", "David"],
+    route: [
+      {
+        from: "FRA",
+        to: "DXB",
+        departure: "02.05.2026, 14:45",
+        arrival: "02.05.2026, 23:30",
+        flightNumber: "Emirates EK46"
+      },
+      {
+        from: "DXB",
+        to: "BLR",
+        departure: "03.05.2026, 03:40",
+        arrival: "03.05.2026, 08:20",
+        flightNumber: "Emirates EK564"
+      }
+    ]
+  }
+];
 ---
-<section class="flight-table" aria-label="Gebuchte Flüge">
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          {headers.map((header) => (
-            <th>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {flights.map((flight) => (
-          <tr>
-            <td>{flight.guests}</td>
-            <td>{flight.route}</td>
-            <td>{flight.departure}</td>
-            <td>{flight.arrival}</td>
-            <td>{flight.type}</td>
-            <td>{flight.details}</td>
-          </tr>
+
+<section class="flight-list" aria-label="Gebuchte Flüge">
+  {flights.map((flight) => (
+    <details class="connection-item">
+      <summary>
+        <div class="summary-grid">
+          <p><strong>Gäste:</strong> {flight.guests.join(", ")}</p>
+          <p>
+            <strong>Flughäfen:</strong>
+            {getAirportsFromRoute(flight.route).map(formatAirport).join(" → ")}
+          </p>
+          <p><strong>Start:</strong> {getDepartureFromRoute(flight.route)}</p>
+          <p><strong>Ziel:</strong> {getArrivalFromRoute(flight.route)}</p>
+        </div>
+      </summary>
+
+      <ol class="route-list" aria-label="Detaillierte Flugroute">
+        {flight.route.map((segment) => (
+          <li>
+            <p class="segment-route">{formatAirport(segment.from)} → {formatAirport(segment.to)}</p>
+            <p class="segment-time">{segment.departure} → {segment.arrival}</p>
+            {segment.flightNumber && (
+              <p class="segment-flight">Flug: {segment.flightNumber}</p>
+            )}
+          </li>
         ))}
-      </tbody>
-    </table>
-  </div>
+      </ol>
+    </details>
+  ))}
 </section>
 
 <style>
-  .flight-table {
+  .flight-list {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     margin: 1rem 0;
-  }
 
-  .table-wrapper {
-    overflow-x: auto;
-    border-radius: .5rem;
-    background: #f9f6f1;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-  }
+    .connection-item {
+      border-radius: .5rem;
+      background: #f9f6f1;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
 
-  table {
-    width: 100%;
-    min-width: 780px;
-    border-collapse: collapse;
-    font-size: 0.95rem;
-  }
+      &[open] summary {
+        background: #f5efe7;
+      }
 
-  th,
-  td {
-    padding: 0.85rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
+      &:focus-within {
+        outline: 2px solid rgba(161, 91, 0, 0.3);
+        outline-offset: 1px;
+      }
 
-  thead th {
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    color: #a15b00;
-  }
+      summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 0.9rem 1rem;
 
-  tbody tr:nth-child(even) {
-    background: #fff;
-  }
+        &::-webkit-details-marker {
+          display: none;
+        }
 
-  tbody tr:nth-child(odd) {
-    background: #f5efe7;
-  }
+        &:focus-visible {
+          outline: 2px solid rgba(161, 91, 0, 0.45);
+          outline-offset: 2px;
+          border-radius: .35rem;
+        }
+      }
 
-  @media (max-width: 640px) {
-    th,
-    td {
-      padding: 0.7rem 0.6rem;
-      font-size: 0.85rem;
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.45rem 1rem;
+
+        p {
+          margin: 0;
+          font-size: 0.95rem;
+        }
+      }
+
+      .route-list {
+        margin: 0;
+        padding: 0.4rem 1.2rem 1rem 2.1rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        background: #fff;
+
+        li {
+          padding: 0.5rem 0;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+          &:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+          }
+        }
+
+        .segment-route,
+        .segment-time,
+        .segment-flight {
+          margin: 0;
+        }
+
+        .segment-route {
+          font-weight: 600;
+        }
+
+        .segment-time,
+        .segment-flight {
+          font-size: 0.9rem;
+        }
+
+        .segment-flight {
+          color: #a15b00;
+        }
+      }
+    }
+
+    @media (max-width: 740px) {
+      .connection-item {
+        .summary-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+
+    @media (max-width: 640px) {
+      .connection-item {
+        summary {
+          padding: 0.75rem;
+        }
+
+        .summary-grid p,
+        .route-list .segment-time,
+        .route-list .segment-flight {
+          font-size: 0.85rem;
+        }
+
+        .route-list {
+          padding: 0.35rem 0.85rem 0.85rem 1.65rem;
+        }
+      }
+    }
+
+    @media (max-width: 440px) {
+      .connection-item {
+        .summary-grid p {
+          line-height: 1.4;
+        }
+
+        .route-list {
+          padding-left: 1.4rem;
+        }
+      }
     }
   }
 </style>

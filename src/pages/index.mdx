@@ -11,25 +11,6 @@ import FlightTable from "../components/FlightTable.astro";
 import Header from "../components/Header.astro";
 import TranslateButton from "../components/TranslateButton.astro";
 
-export const bookedFlights = [
-  {
-    guests: "Anna & Tobias",
-    route: "München → Bengaluru",
-    departure: "02.05.2026, 12:05",
-    arrival: "03.05.2026, 00:25",
-    type: "Direktflug",
-    details: "Lufthansa LH764"
-  },
-  {
-    guests: "Lea & David",
-    route: "Frankfurt → Dubai → Bengaluru",
-    departure: "02.05.2026, 14:45",
-    arrival: "03.05.2026, 08:20",
-    type: "1 Umstieg",
-    details: "Emirates EK46 + EK564"
-  }
-];
-
 <Header />
 
 <main>
@@ -149,7 +130,7 @@ bereits gebuchte Flüge. Die Liste wird laufend ergänzt.
 </section>
 
 <div style="width: 100%; max-width: 72rem; margin: 0 auto;">
-  <FlightTable flights={bookedFlights} />
+  <FlightTable />
 </div>
 
 <section class="prose">
