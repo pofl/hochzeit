@@ -1,0 +1,163 @@
+---
+import CollapsibleCard from "./CollapsibleCard.astro";
+import { type FlightSegment, type FlightConnection } from "./types";
+
+interface Props {
+  flight: FlightConnection;
+}
+
+const airportCityByCode: Record<string, string> = {
+  DRS: "Dresden",
+  MUC: "München",
+  FRA: "Frankfurt",
+  DXB: "Dubai",
+  BLR: "Bengaluru"
+};
+
+const formatAirport = (code: string) => {
+  const city = airportCityByCode[code];
+  return city ? `${city} (${code})` : code;
+};
+
+const getAirportsFromRoute = (route: FlightSegment[]) => {
+  const codes: string[] = [];
+  route.forEach((segment) => {
+    if (!codes.includes(segment.from)) codes.push(segment.from);
+    if (!codes.includes(segment.to)) codes.push(segment.to);
+  });
+  return codes;
+};
+
+const formatTimestamp = (timestamp: string) => {
+  const match = timestamp.match(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2})?(Z|[+-]\d{2}:\d{2})$/
+  );
+  if (!match) return timestamp;
+  const [, year, month, day, hour, minute, offset] = match;
+  const offsetLabel = offset === "Z" ? "UTC+00:00" : `UTC${offset}`;
+  return `${day}.${month}.${year}, ${hour}:${minute} (${offsetLabel})`;
+};
+
+const formatDuration = (milliseconds: number) => {
+  if (!Number.isFinite(milliseconds) || milliseconds < 0) return "-";
+  const totalMinutes = Math.round(milliseconds / 60000);
+  const days = Math.floor(totalMinutes / (24 * 60));
+  const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+  const minutes = totalMinutes % 60;
+  return `${days > 0 ? `${days}d ` : ""}${hours}h ${minutes}m`;
+};
+
+const getDurationBetween = (start: string, end: string) =>
+  formatDuration(new Date(end).getTime() - new Date(start).getTime());
+
+const getDepartureFromRoute = (route: FlightSegment[]) => route[0]?.departure ?? "-";
+const getArrivalFromRoute = (route: FlightSegment[]) => route.at(-1)?.arrival ?? "-";
+
+const { flight } = Astro.props;
+---
+
+<CollapsibleCard>
+  <div class="summary-grid" slot="summary">
+    <p>
+      <strong>Flughäfen:</strong>
+      {getAirportsFromRoute(flight.route).map(formatAirport).join(" → ")}
+    </p>
+    <p><strong>Reisende:</strong> {flight.guests.join(", ")}</p>
+    <p><strong>Start:</strong> {formatTimestamp(getDepartureFromRoute(flight.route))}</p>
+    <p><strong>Ziel:</strong> {formatTimestamp(getArrivalFromRoute(flight.route))}</p>
+  </div>
+
+  <ol class="route-list" aria-label="Detaillierte Flugroute">
+    {flight.route.map((segment, index) => (
+      <li>
+        <p class="segment-route">{formatAirport(segment.from)} → {formatAirport(segment.to)}</p>
+        <p class="segment-time">
+          {formatTimestamp(segment.departure)} → {formatTimestamp(segment.arrival)}
+        </p>
+        <p class="segment-duration">
+          Flugdauer: {getDurationBetween(segment.departure, segment.arrival)}
+        </p>
+        {segment.flightNumber && (
+          <p class="segment-flight">Flug: {segment.flightNumber}</p>
+        )}
+        {flight.route[index + 1] && (
+          <p class="layover-time">
+            Umstieg in {formatAirport(segment.to)}: {getDurationBetween(segment.arrival, flight.route[index + 1].departure)}
+          </p>
+        )}
+      </li>
+    ))}
+  </ol>
+</CollapsibleCard>
+
+<style>
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex: 1;
+    gap: 0.45rem 1rem;
+    font-size: 0.95rem;
+
+    @media (max-width: 740px) {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 640px) {
+      font-size: 0.85rem;
+    }
+
+    p {
+      margin: 0;
+
+      @media (max-width: 440px) {
+        line-height: 1.4;
+      }
+    }
+  }
+
+  .route-list {
+    margin: 0;
+    padding: 0.4rem 1.2rem 1rem 2.1rem;
+    font-size: 0.9rem;
+
+    @media (max-width: 640px) {
+      font-size: 0.85rem;
+      padding: 0.35rem 0.85rem 0.85rem 1.65rem;
+    }
+
+    @media (max-width: 440px) {
+      padding-left: 1.4rem;
+    }
+
+    li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+      &:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    :is(.segment-route, .segment-time, .segment-duration, .layover-time, .segment-flight) {
+      margin: 0;
+    }
+
+    .segment-route {
+      font-weight: 600;
+    }
+
+    .segment-duration {
+      color: #5f5f5f;
+    }
+
+    .layover-time {
+      color: #6b4a2b;
+      font-weight: 600;
+    }
+
+    .segment-flight {
+      color: #a15b00;
+    }
+  }
+</style>

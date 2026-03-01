@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import bengaluruImage from "../assets/bengaluru.avif";
 import weddingImage from "../assets/wedding.avif";
 import Calendar from "../components/Calendar.astro";
+import FaqItem from "../components/FaqItem.astro";
 import FlightTable from "../components/FlightTable.astro";
 import Header from "../components/Header.astro";
 import TranslateButton from "../components/TranslateButton.astro";
@@ -42,6 +43,23 @@ bereits gebuchte Flüge. Die Liste wird laufend ergänzt.
 </div>
 
 <section class="prose">
+
+### Fragen und Antworten
+
+<div style="display: flex; flex-direction: column; gap: 0.75rem;">
+  <FaqItem
+    q="Müssen wir ein Visum beantragen?"
+    a="Ja, deutsche Staatsbürger benötigen ein Visum für Indien. Das eVisa kann bequem online über das offizielle Portal des indischen Innenministeriums beantragt werden. Die Bearbeitung dauert in der Regel weniger als eine Woche. Bitte beantragt das Visum mindestens zwei Wochen vor der Abreise."
+  />
+  <FaqItem
+    q="Was sollen wir als Hochzeitsgeschenk mitbringen?"
+    a="Eure Anwesenheit ist das schönste Geschenk! Da die Reise nach Indien ohnehin mit Kosten verbunden ist, erwarten wir keinerlei Geschenke. Wer dennoch etwas schenken möchte, kann uns gerne eine persönliche Nachricht oder einen Brief mitbringen – das würde uns sehr freuen."
+  />
+  <FaqItem
+    q="Gibt es eine Möglichkeit, die Reise gemeinsam zu organisieren?"
+    a="Ja, wir möchten die An- und Abreise so gut wie möglich koordinieren, damit möglichst viele von euch gemeinsam reisen können. Schaut euch die bereits gebuchten Flüge oben an und meldet euch bei uns, wenn ihr eine ähnliche Verbindung plant. Wir helfen gerne beim Abstimmen."
+  />
+</div>
 
 ## Anreise und Unterkunft
 

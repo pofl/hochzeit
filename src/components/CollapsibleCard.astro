@@ -1,0 +1,76 @@
+---
+---
+
+<details class="card">
+  <summary>
+    <slot name="summary" />
+    <span class="chevron" aria-hidden="true"></span>
+  </summary>
+  <div class="body">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .card {
+    border-radius: .5rem;
+    background: #f9f6f1;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+
+    &[open] > summary {
+      background: #f5efe7;
+    }
+
+    > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.9rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      @media (max-width: 640px) {
+        padding: 0.75rem;
+      }
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgba(161, 91, 0, 0.45);
+        outline-offset: 2px;
+        border-radius: .35rem;
+      }
+    }
+
+    .chevron {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      background: rgba(161, 91, 0, 0.12);
+      color: #a15b00;
+      font-size: 0.7rem;
+      transition: transform 0.2s ease;
+      margin-left: auto;
+
+      &::before {
+        content: '▼';
+      }
+    }
+
+    &[open] .chevron {
+      transform: rotate(180deg);
+    }
+
+    .body {
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      background: #fff;
+    }
+  }
+</style>
