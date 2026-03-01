@@ -1,17 +1,10 @@
 ---
 import CollapsibleCard from "./CollapsibleCard.astro";
-
-interface Props {
-  q: string;
-  a: string;
-}
-
-const { q, a } = Astro.props;
 ---
 
 <CollapsibleCard>
-  <span slot="summary" class="faq-question">{q}</span>
-  <p class="faq-answer">{a}</p>
+  <span slot="summary" class="faq-question"><slot name="q" /></span>
+  <div class="faq-answer"><slot name="a" /></div>
 </CollapsibleCard>
 
 <style>
