@@ -24,6 +24,14 @@ import CollapsibleCard from "./CollapsibleCard.astro";
     line-height: 1.6;
     color: #3a2a1a;
 
+    & > :global(p:first-child) {
+      margin-top: 0;
+    }
+
+    & > :global(p:last-child) {
+      margin-bottom: 0;
+    }
+
     @media (max-width: 640px) {
       font-size: 0.85rem;
       padding: 0.75rem;
