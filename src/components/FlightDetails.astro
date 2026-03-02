@@ -1,6 +1,6 @@
 ---
 import CollapsibleCard from "./CollapsibleCard.astro";
-import { type FlightSegment, type FlightConnection } from "./types";
+import { type FlightConnection, type FlightSegment } from "./types";
 
 interface Props {
   flight: FlightConnection;
@@ -100,6 +100,7 @@ const { flight } = Astro.props;
 
     @media (max-width: 740px) {
       grid-template-columns: 1fr;
+      line-height: 1;
     }
 
     @media (max-width: 640px) {
@@ -108,10 +109,6 @@ const { flight } = Astro.props;
 
     p {
       margin: 0;
-
-      @media (max-width: 440px) {
-        line-height: 1.4;
-      }
     }
   }
 
