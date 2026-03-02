@@ -1,6 +1,6 @@
 ---
 import FlightDetails from "./FlightDetails.astro";
-import { type FlightSegment, type FlightConnection } from "./types";
+import { type FlightConnection } from "./types";
 
 const flights: FlightConnection[] = [
   {
@@ -50,6 +50,25 @@ const flights: FlightConnection[] = [
         departure: "2026-05-02T12:50:00+02:00",
         arrival: "2026-05-03T01:20:00+05:30",
         flightNumber: "Lufthansa LH754"
+      }
+    ]
+  },
+  {
+    guests: ["Marie", "Robert", "Ulrike", "André", "Basti", "Christin"],
+    route: [
+      {
+        from: "BLR",
+        to: "FRA",
+        departure: "2026-05-09T03:00:00+05:30",
+        arrival: "2026-05-09T09:05:00+02:00",
+        flightNumber: "Lufthansa LH755"
+      },
+      {
+        from: "FRA",
+        to: "DRS",
+        departure: "2026-05-09T13:35:00+02:00",
+        arrival: "2026-05-09T14:35:00+02:00",
+        flightNumber: "Lufthansa LH64"
       }
     ]
   }
