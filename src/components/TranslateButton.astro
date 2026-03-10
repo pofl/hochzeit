@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <div class="translate-button">
@@ -64,7 +65,7 @@
 <script>
   // Check if we're on a translated version by examining the current URL.
   // Only show on the original website, not on translated versions.
-  const button = document.querySelector('.translate-button') as HTMLElement;
+  const button = document.querySelector(".translate-button") as HTMLElement;
   if (button) {
     if (window.location.href.includes("translate")) {
       button.style.display = "none";

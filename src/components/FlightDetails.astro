@@ -11,7 +11,7 @@ const airportCityByCode: Record<string, string> = {
   MUC: "München",
   FRA: "Frankfurt",
   DXB: "Dubai",
-  BLR: "Bengaluru"
+  BLR: "Bengaluru",
 };
 
 const formatAirport = (code: string) => {
@@ -29,9 +29,7 @@ const getAirportsFromRoute = (route: FlightSegment[]) => {
 };
 
 const formatTimestamp = (timestamp: string) => {
-  const match = timestamp.match(
-    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2})?(Z|[+-]\d{2}:\d{2})$/
-  );
+  const match = timestamp.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2})?(Z|[+-]\d{2}:\d{2})$/);
   if (!match) return timestamp;
   const [, year, month, day, hour, minute, offset] = match;
   const offsetLabel = offset === "Z" ? "UTC+00:00" : `UTC${offset}`;
@@ -68,25 +66,26 @@ const { flight } = Astro.props;
   </div>
 
   <ol class="route-list" aria-label="Detaillierte Flugroute">
-    {flight.route.map((segment, index) => (
-      <li>
-        <p class="segment-route">{formatAirport(segment.from)} → {formatAirport(segment.to)}</p>
-        <p class="segment-time">
-          {formatTimestamp(segment.departure)} → {formatTimestamp(segment.arrival)}
-        </p>
-        <p class="segment-duration">
-          Flugdauer: {getDurationBetween(segment.departure, segment.arrival)}
-        </p>
-        {segment.flightNumber && (
-          <p class="segment-flight">Flug: {segment.flightNumber}</p>
-        )}
-        {flight.route[index + 1] && (
-          <p class="layover-time">
-            Umstieg in {formatAirport(segment.to)}: {getDurationBetween(segment.arrival, flight.route[index + 1].departure)}
+    {
+      flight.route.map((segment, index) => (
+        <li>
+          <p class="segment-route">
+            {formatAirport(segment.from)} → {formatAirport(segment.to)}
           </p>
-        )}
-      </li>
-    ))}
+          <p class="segment-time">
+            {formatTimestamp(segment.departure)} → {formatTimestamp(segment.arrival)}
+          </p>
+          <p class="segment-duration">Flugdauer: {getDurationBetween(segment.departure, segment.arrival)}</p>
+          {segment.flightNumber && <p class="segment-flight">Flug: {segment.flightNumber}</p>}
+          {flight.route[index + 1] && (
+            <p class="layover-time">
+              Umstieg in {formatAirport(segment.to)}:{" "}
+              {getDurationBetween(segment.arrival, flight.route[index + 1].departure)}
+            </p>
+          )}
+        </li>
+      ))
+    }
   </ol>
 </CollapsibleCard>
 

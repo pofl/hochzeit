@@ -14,26 +14,27 @@ interface Props {
 const { people } = Astro.props;
 const headers = ["Name", "Teilnahme", "Reisepass", "Geburtsurkunde", "eVisa"];
 ---
+
 <section class="attendance-table" aria-label="Reisedokumentenstatus">
   <div class="table-wrapper">
     <table>
       <thead>
         <tr>
-          {headers.map((header) => (
-            <th>{header}</th>
-          ))}
+          {headers.map((header) => <th>{header}</th>)}
         </tr>
       </thead>
       <tbody>
-        {people.map((person) => (
-          <tr>
-            <td>{person.name}</td>
-            <td>{person.teilnahme}</td>
-            <td>{person.reisepass}</td>
-            <td>{person.geburtsurkunde}</td>
-            <td>{person.eVisa}</td>
-          </tr>
-        ))}
+        {
+          people.map((person) => (
+            <tr>
+              <td>{person.name}</td>
+              <td>{person.teilnahme}</td>
+              <td>{person.reisepass}</td>
+              <td>{person.geburtsurkunde}</td>
+              <td>{person.eVisa}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </div>
@@ -49,7 +50,7 @@ const headers = ["Name", "Teilnahme", "Reisepass", "Geburtsurkunde", "eVisa"];
 
   .table-wrapper {
     overflow-x: auto;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
     background: #f9f6f1;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
   }

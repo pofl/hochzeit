@@ -11,16 +11,16 @@ const flights: FlightConnection[] = [
         to: "MUC",
         departure: "2026-05-02T09:35:00+02:00",
         arrival: "2026-05-02T10:30:00+02:00",
-        flightNumber: "Lufthansa LH2123"
+        flightNumber: "Lufthansa LH2123",
       },
       {
         from: "MUC",
         to: "BLR",
         departure: "2026-05-02T12:05:00+02:00",
         arrival: "2026-05-03T00:30:00+05:30",
-        flightNumber: "Lufthansa LH764"
-      }
-    ]
+        flightNumber: "Lufthansa LH764",
+      },
+    ],
   },
   {
     guests: ["Ulrike", "André", "Uwe", "Basti", "Christin"],
@@ -30,16 +30,16 @@ const flights: FlightConnection[] = [
         to: "FRA",
         departure: "2026-05-02T10:35:00+02:00",
         arrival: "2026-05-02T11:40:00+02:00",
-        flightNumber: "Lufthansa LH63"
+        flightNumber: "Lufthansa LH63",
       },
       {
         from: "FRA",
         to: "BLR",
         departure: "2026-05-02T12:50:00+02:00",
         arrival: "2026-05-03T01:20:00+05:30",
-        flightNumber: "Lufthansa LH754"
-      }
-    ]
+        flightNumber: "Lufthansa LH754",
+      },
+    ],
   },
   {
     guests: ["Andi", "Paul"],
@@ -49,9 +49,9 @@ const flights: FlightConnection[] = [
         to: "BLR",
         departure: "2026-05-02T12:50:00+02:00",
         arrival: "2026-05-03T01:20:00+05:30",
-        flightNumber: "Lufthansa LH754"
-      }
-    ]
+        flightNumber: "Lufthansa LH754",
+      },
+    ],
   },
   {
     guests: ["Jirka", "Calvin"],
@@ -61,16 +61,16 @@ const flights: FlightConnection[] = [
         to: "AUH",
         departure: "2026-05-02T11:20:00+02:00",
         arrival: "2026-05-02T19:05:00+04:00",
-        flightNumber: "Etihad Airways EY156"
+        flightNumber: "Etihad Airways EY156",
       },
       {
         from: "AUH",
         to: "BLR",
         departure: "2026-05-02T21:35:00+04:00",
         arrival: "2026-05-03T03:15:00+05:30",
-        flightNumber: "Etihad Airways EY232"
-      }
-    ]
+        flightNumber: "Etihad Airways EY232",
+      },
+    ],
   },
   {
     guests: ["Marie", "Robert", "Ulrike", "André", "Basti", "Christin"],
@@ -80,24 +80,22 @@ const flights: FlightConnection[] = [
         to: "FRA",
         departure: "2026-05-09T03:00:00+05:30",
         arrival: "2026-05-09T09:05:00+02:00",
-        flightNumber: "Lufthansa LH755"
+        flightNumber: "Lufthansa LH755",
       },
       {
         from: "FRA",
         to: "DRS",
         departure: "2026-05-09T13:35:00+02:00",
         arrival: "2026-05-09T14:35:00+02:00",
-        flightNumber: "Lufthansa LH64"
-      }
-    ]
-  }
+        flightNumber: "Lufthansa LH64",
+      },
+    ],
+  },
 ];
 ---
 
 <section class="flight-list" aria-label="Gebuchte Flüge">
-  {flights.map((flight) => (
-    <FlightDetails flight={flight} />
-  ))}
+  {flights.map((flight) => <FlightDetails flight={flight} />)}
 </section>
 
 <style>
