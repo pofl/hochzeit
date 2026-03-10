@@ -38,16 +38,29 @@ const { title } = Astro.props;
     --highlight: #ff7722;
     --highlight-dark: #ff5500;
     --bg-highlight: color-mix(in srgb, var(--highlight), white 90%);
+    --content-width: 35rem;
+    --wide-width: 72rem;
   }
   body {
     margin: 40px auto;
     color: #444;
     padding: 1rem;
   }
-  .prose {
-    max-width: 35rem;
+  main {
+    max-width: var(--content-width);
     margin-left: auto;
     margin-right: auto;
+  }
+  .prose {
+    max-width: var(--content-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .wide {
+    width: min(var(--wide-width), calc(100vw - 2rem));
+    max-width: var(--wide-width);
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
   h1,
   h2,
