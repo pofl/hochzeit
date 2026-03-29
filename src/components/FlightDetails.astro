@@ -19,9 +19,9 @@ const airportCityByCode: Record<string, string> = {
   AUH: "Abu Dhabi",
 };
 
-const formatAirport = (code: string) => {
+const formatAirport = (code: string, withCode: boolean = false) => {
   const city = airportCityByCode[code];
-  return city ? `${city} (${code})` : code;
+  return city ? `${city}${withCode ? ` (${code})` : ""}` : code;
 };
 
 const getAirportsFromRoute = (route: FlightSegment[]) => {
@@ -63,7 +63,7 @@ const { flight } = Astro.props;
   <div class="summary-grid" slot="summary">
     <p>
       <strong>Flughäfen:</strong>
-      {getAirportsFromRoute(flight.route).map(formatAirport).join(" → ")}
+      {getAirportsFromRoute(flight.route).map((code) => formatAirport(code)).join(" → ")}
     </p>
     <p><strong>Reisende:</strong> {flight.guests.join(", ")}</p>
     <p><strong>Start:</strong> {formatTimestamp(getDepartureFromRoute(flight.route))}</p>
@@ -75,7 +75,7 @@ const { flight } = Astro.props;
       flight.route.map((segment, index) => (
         <li>
           <p class="segment-route">
-            {formatAirport(segment.from)} → {formatAirport(segment.to)}
+            {formatAirport(segment.from, true)} → {formatAirport(segment.to, true)}
           </p>
           <p class="segment-time">
             {formatTimestamp(segment.departure)} → {formatTimestamp(segment.arrival)}
