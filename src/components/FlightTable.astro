@@ -4,6 +4,44 @@ import { type FlightConnection } from "./types";
 
 const flights: FlightConnection[] = [
   {
+    guests: ["Florian"],
+    route: [
+      {
+        from: "MUC",
+        to: "MCT",
+        departure: "2026-04-11T21:55:00+02:00",
+        arrival: "2026-04-12T06:30:00+04:00",
+        flightNumber: "Oman Air WY124",
+      },
+      {
+        from: "MCT",
+        to: "BOM",
+        departure: "2026-04-12T09:20:00+04:00",
+        arrival: "2026-04-12T13:40:00+05:30",
+        flightNumber: "Oman Air WY203",
+      },
+      {
+        from: "BOM",
+        to: "VNS",
+        departure: "2026-04-12T17:45:00+05:30",
+        arrival: "2026-04-12T20:00:00+05:30",
+        flightNumber: "IndiGo 6E 272",
+      },
+    ],
+  },
+  {
+    guests: ["Shruti", "Florian"],
+    route: [
+      {
+        from: "VNS",
+        to: "BLR",
+        departure: "2026-05-02T18:15:00+05:30",
+        arrival: "2026-05-02T20:45:00+05:30",
+        flightNumber: "IndiGo 6E 6597",
+      },
+    ],
+  },
+  {
     guests: ["Marie", "Robert"],
     route: [
       {
@@ -88,6 +126,25 @@ const flights: FlightConnection[] = [
         departure: "2026-05-09T13:35:00+02:00",
         arrival: "2026-05-09T14:35:00+02:00",
         flightNumber: "Lufthansa LH64",
+      },
+    ],
+  },
+  {
+    guests: ["Shruti", "Florian"],
+    route: [
+      {
+        from: "BOM",
+        to: "MCT",
+        departure: "2026-05-18T10:15:00+05:30",
+        arrival: "2026-05-18T11:30:00+04:00",
+        flightNumber: "Oman Air WY202",
+      },
+      {
+        from: "MCT",
+        to: "MUC",
+        departure: "2026-05-18T15:50:00+04:00",
+        arrival: "2026-05-18T20:55:00+02:00",
+        flightNumber: "Oman Air WY123",
       },
     ],
   },
