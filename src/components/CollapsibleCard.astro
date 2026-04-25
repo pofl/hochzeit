@@ -15,12 +15,12 @@
 <style>
   .card {
     border-radius: 0.5rem;
-    background: #f9f6f1;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--surface-warm);
+    border: 1px solid var(--border-soft);
     overflow: hidden;
 
     &[open] > summary {
-      background: #f5efe7;
+      background: var(--surface-warm-hover);
     }
 
     > summary {
@@ -40,7 +40,7 @@
       }
 
       &:focus-visible {
-        outline: 2px solid rgba(161, 91, 0, 0.45);
+        outline: 2px solid var(--brown-tint-focus);
         outline-offset: 2px;
         border-radius: 0.35rem;
       }
@@ -54,8 +54,8 @@
       width: 1.4rem;
       height: 1.4rem;
       border-radius: 50%;
-      background: rgba(161, 91, 0, 0.12);
-      color: #a15b00;
+      background: var(--brown-tint);
+      color: var(--brown);
       font-size: 0.7rem;
       transition: transform 0.2s ease;
       margin-left: auto;
@@ -70,7 +70,7 @@
     }
 
     .body {
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      border-top: 1px solid var(--border-soft);
       background: #fff;
     }
   }

@@ -35,15 +35,41 @@ const { title } = Astro.props;
     font-style: normal;
     font-variation-settings: "wdth" 100;
 
-    --highlight: #ff7722;
-    --highlight-dark: #ff5500;
-    --bg-highlight: color-mix(in srgb, var(--highlight), white 90%);
     --content-width: 35rem;
     --wide-width: 72rem;
+
+    /* text */
+    --text: #444;
+    --text-muted: #666;
+    --text-subtle: #555;
+    --text-secondary: #5f5f5f;
+
+    /* indian orange */
+    --orange: #ff7722;
+    --orange-dark: #ff5500;
+    --orange-tint: color-mix(in srgb, var(--orange), white 90%);
+
+    /* warm brown scale */
+    --brown: #a15b00;
+    --brown-dark: #6b4a2b;
+    --brown-deeper: #3a2a1a;
+    --brown-tint: rgba(161, 91, 0, 0.12);
+    --brown-tint-focus: rgba(161, 91, 0, 0.45);
+
+    /* surfaces */
+    --surface-warm: #f9f6f1;
+    --surface-warm-hover: #f5efe7;
+    --surface-neutral: #f5f5f5;
+    --surface-neutral-hover: #e8e8e8;
+
+    /* borders */
+    --border: #ddd;
+    --border-soft: rgba(0, 0, 0, 0.08);
+    --border-subtle: rgba(0, 0, 0, 0.06);
   }
   body {
     margin: 40px auto;
-    color: #444;
+    color: var(--text);
     padding: 1rem;
   }
   main {
@@ -85,15 +111,15 @@ const { title } = Astro.props;
   }
   a {
     text-decoration: none;
-    color: var(--highlight-dark);
+    color: var(--orange-dark);
     &:hover {
       text-decoration: underline;
     }
   }
 
   code {
-    background-color: var(--bg-highlight);
-    color: #a15b00;
+    background-color: var(--orange-tint);
+    color: var(--brown);
     border-radius: 4px;
     padding: 0.1em 0.35em;
     font-size: 0.875em;
@@ -105,11 +131,11 @@ const { title } = Astro.props;
   }
 
   blockquote {
-    border-left: 4px solid var(--highlight);
+    border-left: 4px solid var(--orange);
     margin-left: 0;
     margin-right: 0;
     padding: 0.5em 0.5em 0.5em 1em;
-    background-color: var(--bg-highlight);
+    background-color: var(--orange-tint);
 
     & > *:first-child {
       margin-top: 0;
