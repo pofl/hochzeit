@@ -4,6 +4,7 @@ title: Nur noch eine Woche bis zur Hochzeit!
 ---
 
 import { Image } from "astro:assets";
+import ChecklistItem from "../components/ChecklistItem.astro";
 import Header from "../components/Header.astro";
 
 <Header />
@@ -43,23 +44,28 @@ bieten als T-Shirt und kurze Hose.
 
 ## Packliste
 
-- Reisepass
-- Visum -- am besten ausgedruckt. Oder so auf dem Handy gespeichert, dass es ohne Internet abrufbar ist.
-- Kreditkarte
-- eSIM
-- Handyladekabel
-- Power Bank
-- Pillen gegen Allergie
-- Schmerzmittel
-- Durchfallmittel -- falls ihr doch aus versehen nicht-abgekochtes Wasser trinkt.
-- Atemmaske
-- Oropax -- wichtig, denn mit dem Berufsverkehr beginnt früh morgens auch das Hupen auf der Straße.
-- Bauchtasche -- weil das Handy in der Hosentasche nicht gut vor Diebstahl geschützt ist.
-- Regenschirm -- gegen Regen und gegen Sonne
-- Brillenputztücher -- eignen sich auch zum Finger abwischen nach dem Essen.
-- Badehose -- für den Hotel-Pool
-- Noch ein letztes mal die Pflanzen gießen
-- Mückenspray
-- Sonnencreme
+> Ihr könnt die Gegenstände auf der Liste abhaken. Das wird in eurem Browser (und nur da) gespeichert und wenn ihr die
+> Seite das nächste mal in dem selben Browser öffnet, sind die Gegenstände immer noch abgehakt.
+
+<div style="display: flex; flex-direction: column; gap: 0.15rem;">
+  <ChecklistItem id="reisepass">Reisepass</ChecklistItem>
+  <ChecklistItem id="visum">Visum -- am besten ausgedruckt. Oder so auf dem Handy gespeichert, dass es ohne Internet abrufbar ist.</ChecklistItem>
+  <ChecklistItem id="kreditkarte">Kreditkarte</ChecklistItem>
+  <ChecklistItem id="esim">eSIM</ChecklistItem>
+  <ChecklistItem id="handyladekabel">Handyladekabel</ChecklistItem>
+  <ChecklistItem id="powerbank">Power Bank</ChecklistItem>
+  <ChecklistItem id="allergie">Pillen gegen Allergie</ChecklistItem>
+  <ChecklistItem id="schmerzmittel">Schmerzmittel</ChecklistItem>
+  <ChecklistItem id="durchfallmittel">Durchfallmittel -- falls ihr doch aus versehen nicht-abgekochtes Wasser trinkt.</ChecklistItem>
+  <ChecklistItem id="atemmaske">Atemmaske</ChecklistItem>
+  <ChecklistItem id="oropax">Oropax -- wichtig, denn mit dem Berufsverkehr beginnt früh morgens auch das Hupen auf der Straße.</ChecklistItem>
+  <ChecklistItem id="bauchtasche">Bauchtasche -- weil das Handy in der Hosentasche nicht gut vor Diebstahl geschützt ist.</ChecklistItem>
+  <ChecklistItem id="regenschirm">Regenschirm -- gegen Regen und gegen Sonne</ChecklistItem>
+  <ChecklistItem id="brillenputztuecher">Brillenputztücher -- eignen sich auch zum Finger abwischen nach dem Essen.</ChecklistItem>
+  <ChecklistItem id="badehose">Badehose -- für den Hotel-Pool</ChecklistItem>
+  <ChecklistItem id="pflanzen">Noch ein letztes mal die Pflanzen gießen</ChecklistItem>
+  <ChecklistItem id="mueckenspray">Mückenspray</ChecklistItem>
+  <ChecklistItem id="sonnencreme">Sonnencreme</ChecklistItem>
+</div>
 
 </main>

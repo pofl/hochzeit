@@ -1,0 +1,115 @@
+---
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<label class="checklist-item" data-id={id}>
+  <input type="checkbox" class="checklist-checkbox" />
+  <span class="checklist-box" aria-hidden="true"></span>
+  <span class="checklist-content"><slot /></span>
+</label>
+
+<script>
+  function initChecklistItems() {
+    document.querySelectorAll<HTMLElement>(".checklist-item").forEach((label) => {
+      const id = label.dataset.id!;
+      const checkbox = label.querySelector<HTMLInputElement>(".checklist-checkbox")!;
+      const storageKey = `checklist:${id}`;
+
+      // Restore persisted state
+      checkbox.checked = localStorage.getItem(storageKey) === "1";
+      label.classList.toggle("is-checked", checkbox.checked);
+
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+          localStorage.setItem(storageKey, "1");
+        } else {
+          localStorage.removeItem(storageKey);
+        }
+        label.classList.toggle("is-checked", checkbox.checked);
+      });
+    });
+  }
+
+  // Run on first load and after view transitions
+  initChecklistItems();
+  document.addEventListener("astro:after-swap", initChecklistItems);
+</script>
+
+<style>
+  .checklist-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    border-radius: 0.3rem;
+    transition: color 0.15s ease;
+
+    &:not(.is-checked):hover .checklist-box {
+      border-color: var(--orange);
+      background: var(--orange-tint);
+    }
+
+    &.is-checked:hover .checklist-box {
+      background: var(--orange-dark);
+      border-color: var(--orange-dark);
+    }
+  }
+
+  .checklist-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .checklist-box {
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    margin-top: 0.15em;
+    border: 1.5px solid var(--border);
+    border-radius: 0.25em;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    position: relative;
+
+    &::after {
+      content: "";
+      display: block;
+      width: 0.35em;
+      height: 0.6em;
+      border-right: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(45deg) scale(0) translate(-1px, -1px);
+      transition: transform 0.1s ease;
+    }
+  }
+
+  .is-checked .checklist-box {
+    background: var(--orange);
+    border-color: var(--orange);
+
+    &::after {
+      transform: rotate(45deg) scale(1) translate(-1px, -1px);
+    }
+  }
+
+  .checklist-content {
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .is-checked .checklist-content {
+    opacity: 0.45;
+    text-decoration: line-through;
+    text-decoration-color: var(--orange-dark);
+  }
+</style>
