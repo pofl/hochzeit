@@ -1,4 +1,6 @@
 ---
+import { Font } from "astro:assets";
+
 interface Props {
   title: string;
 }
@@ -13,11 +15,9 @@ const { title } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link
-      href="https://fonts.bunny.net/css?family=dm-sans:300,600|playfair-display:400|tangerine:400"
-      rel="stylesheet"
-    />
+    <Font cssVariable="--font-dm-sans" preload />
+    <Font cssVariable="--font-playfair-display" preload />
+    <Font cssVariable="--font-tangerine" />
   </head>
   <body>
     <slot />
@@ -29,7 +29,7 @@ const { title } = Astro.props;
     line-height: 1.6;
     text-align: start;
     font-size: 18px;
-    font-family: "DM Sans", sans-serif;
+    font-family: var(--font-dm-sans), sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
@@ -92,7 +92,7 @@ const { title } = Astro.props;
   h2,
   h3 {
     line-height: 1.2;
-    font-family: "Playfair Display", serif;
+    font-family: var(--font-playfair-display), serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
