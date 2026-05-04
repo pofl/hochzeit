@@ -1,9 +1,8 @@
 ---
-layout: ../layouts/Layout.astro
+layout: ../layouts/FancyLayout.astro
 title: Shruti und Flo heiraten
 ---
 
-import Header from "../components/Header.astro";
 import PeopleTable from "../components/PeopleTable.astro";
 
 export const guestDocs = [
@@ -72,17 +71,13 @@ export const guestDocs = [
   },
 ];
 
-<Header />
+<section style="text-align: center;">
+  <h1>Teilnahme &amp; Reisedokumente</h1>
+  <p>
+    Die Tabelle listet den aktuellen Stand zu Teilnahme, Reisepass, Geburtsurkunde und eVisa
+    für unsere Gäste.
+  </p>
+</section>
 
-<main>
-	<section style="text-align: center;">
-		<h1>Teilnahme &amp; Reisedokumente</h1>
-		<p>
-			Die Tabelle listet den aktuellen Stand zu Teilnahme, Reisepass, Geburtsurkunde und eVisa
-			für unsere Gäste.
-		</p>
-	</section>
+<PeopleTable people={guestDocs} />
 
-    <PeopleTable people={guestDocs} />
-
-</main>
