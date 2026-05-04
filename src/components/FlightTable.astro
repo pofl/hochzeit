@@ -149,10 +149,15 @@ const flights: FlightConnection[] = [
     ],
   },
 ];
+
+const getDepartureFromRoute = (route: FlightConnection["route"]) => route[0]?.departure ?? "";
+
+const now = new Date();
+const visibleFlights = flights.filter((flight) => new Date(getDepartureFromRoute(flight.route)) >= now);
 ---
 
 <section class="flight-list" aria-label="Gebuchte Flüge">
-  {flights.map((flight) => <FlightDetails flight={flight} />)}
+  {visibleFlights.map((flight) => <FlightDetails flight={flight} />)}
 </section>
 
 <style>
