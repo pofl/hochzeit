@@ -1,10 +1,12 @@
 ---
-
+const origin = "https://hochzeit.fpolster.dev";
+const pageUrl = new URL(Astro.url.pathname, origin).toString();
+const translateUrl = `https://translate.google.com/translate?u=${encodeURIComponent(pageUrl)}&sl=de&tl=en`;
 ---
 
 <div class="translate-button">
   <a
-    href="https://translate.google.com/translate?u=https%3A%2F%2Fhochzeit.fpolster.dev&sl=de&tl=en"
+    href={translateUrl}
     target="_blank"
     rel="noopener noreferrer"
     title="Translate to English"
