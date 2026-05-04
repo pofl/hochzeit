@@ -63,7 +63,11 @@ const { flight } = Astro.props;
   <div class="summary-grid" slot="summary">
     <p>
       <strong>Flughäfen:</strong>
-      {getAirportsFromRoute(flight.route).map((code) => formatAirport(code)).join(" → ")}
+      {
+        getAirportsFromRoute(flight.route)
+          .map((code) => formatAirport(code))
+          .join(" → ")
+      }
     </p>
     <p><strong>Reisende:</strong> {flight.guests.join(", ")}</p>
     <p><strong>Start:</strong> {formatTimestamp(getDepartureFromRoute(flight.route))}</p>
