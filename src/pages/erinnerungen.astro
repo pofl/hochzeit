@@ -180,6 +180,7 @@ const fullImages = await Promise.all(
   const viewport = document.getElementById("lb-viewport")!;
 
   let current = 0;
+  let pinching = false;
 
   // ── open / close ──────────────────────────────────────────────────────────
   function openLightbox(index: number) {
@@ -191,7 +192,8 @@ const fullImages = await Promise.all(
   function close() {
     lb.hidden = true;
     document.body.style.overflow = "";
-    resetTransform();
+    restoreFlexLayout();
+    pinching = false;
   }
 
   function show() {
@@ -201,7 +203,8 @@ const fullImages = await Promise.all(
     lbPrev.style.display = current === 0 ? "none" : "";
     lbNext.style.display = current === srcs.length - 1 ? "none" : "";
     lb.hidden = false;
-    resetTransform();
+    restoreFlexLayout();
+    pinching = false;
   }
 
   function prev() { if (current > 0) { current--; show(); } }
@@ -225,89 +228,126 @@ const fullImages = await Promise.all(
   });
 
   // ── pinch-zoom + pan ──────────────────────────────────────────────────────
-  let scale = 1, originX = 0, originY = 0;
+  // We keep transform-origin fixed at "0 0" and represent the whole transform
+  // as (panX, panY, scale), where the CSS is:
+  //   transform: translate(panX, panY) scale(scale)
+  // This means: first scale around 0,0, then translate.
+  // To zoom around a focal point F (in viewport px):
+  //   newPanX = F.x - (F.x - panX) * (newScale / scale)
+  //   newPanY = F.y - (F.y - panY) * (newScale / scale)
+  // All coordinates are in viewport (clientX/clientY) space — no getBoundingClientRect needed.
+
+  let scale = 1;
   let panX = 0, panY = 0;
 
   function resetTransform() {
-    scale = 1; panX = 0; panY = 0; originX = 0; originY = 0;
+    scale = 1; panX = 0; panY = 0;
     applyTransform();
   }
 
   function applyTransform() {
-    lbImg.style.transformOrigin = `${originX}px ${originY}px`;
+    lbImg.style.transformOrigin = "0 0";
     lbImg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
   }
 
-  // pinch state
-  let touches: Touch[] = [];
+  // When scale==1 the image is centred by flexbox. We need to know where the
+  // image's top-left corner sits in viewport space so we can set panX/panY
+  // correctly when the first pinch begins.
+  function syncPanFromLayout() {
+    // At scale==1 and no user pan, the image is centred by the flex container.
+    // Read where it actually is and absorb that offset into panX/panY so the
+    // math stays consistent from the very first touch.
+    if (scale !== 1) return;
+    const r = lbImg.getBoundingClientRect();
+    // With transform-origin:0 0 and translate(panX,panY) scale(1):
+    // r.left === panX  (since scale==1 means no scaling offset)
+    panX = r.left;
+    panY = r.top;
+    // Now remove flexbox centering so our transform drives position instead
+    lbImg.style.position = "absolute";
+    lbImg.style.top = "0";
+    lbImg.style.left = "0";
+    applyTransform();
+  }
+
+  function restoreFlexLayout() {
+    lbImg.style.position = "";
+    lbImg.style.top = "";
+    lbImg.style.left = "";
+    lbImg.style.transform = "";
+    lbImg.style.transformOrigin = "";
+    scale = 1; panX = 0; panY = 0;
+  }
+
+  // pinch state — all in viewport (clientX/Y) coordinates
   let startDist = 0, startScale = 1;
-  let startMidX = 0, startMidY = 0;
+  let startMidX = 0, startMidY = 0;   // focal point when pinch started
   let startPanX = 0, startPanY = 0;
 
-  // swipe state (single finger, no zoom active)
+  // swipe state
   let swipeStartX = 0, swipeStartY = 0, swiping = false;
 
-  function dist(a: Touch, b: Touch) {
+  function tdist(a: Touch, b: Touch) {
     return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
   }
-  function mid(a: Touch, b: Touch) {
+  function tmid(a: Touch, b: Touch) {
     return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
   }
 
   viewport.addEventListener("touchstart", (e) => {
-    touches = Array.from(e.touches);
-    if (touches.length === 2) {
-      // pinch begin
-      startDist  = dist(touches[0], touches[1]);
+    if (e.touches.length === 2) {
+      if (!pinching) {
+        // First time we go to 2 fingers: absorb flexbox position
+        if (scale === 1) syncPanFromLayout();
+        pinching = true;
+      }
+      const t = Array.from(e.touches);
+      startDist  = tdist(t[0], t[1]);
       startScale = scale;
-      const m   = mid(touches[0], touches[1]);
-      // midpoint relative to image element origin
-      const r   = lbImg.getBoundingClientRect();
-      startMidX = m.x - r.left;
-      startMidY = m.y - r.top;
-      originX   = startMidX;
-      originY   = startMidY;
-      startPanX = panX;
-      startPanY = panY;
-      swiping   = false;
-    } else if (touches.length === 1) {
-      swipeStartX = touches[0].clientX;
-      swipeStartY = touches[0].clientY;
+      const m    = tmid(t[0], t[1]);
+      startMidX  = m.x;
+      startMidY  = m.y;
+      startPanX  = panX;
+      startPanY  = panY;
+      swiping    = false;
+    } else if (e.touches.length === 1) {
+      swipeStartX = e.touches[0].clientX;
+      swipeStartY = e.touches[0].clientY;
       swiping = true;
     }
   }, { passive: true });
 
   viewport.addEventListener("touchmove", (e) => {
-    touches = Array.from(e.touches);
-    if (touches.length === 2) {
+    if (e.touches.length === 2) {
       swiping = false;
       e.preventDefault();
-      const newDist = dist(touches[0], touches[1]);
-      scale = Math.min(8, Math.max(1, startScale * (newDist / startDist)));
+      const t = Array.from(e.touches);
+      const newDist = tdist(t[0], t[1]);
+      const newScale = Math.min(8, Math.max(1, startScale * (newDist / startDist)));
 
-      // keep pinch midpoint stable under finger
-      const m   = mid(touches[0], touches[1]);
-      const r   = lbImg.getBoundingClientRect();
-      const curMidX = m.x - r.left;
-      const curMidY = m.y - r.top;
-      panX = startPanX + (curMidX - startMidX);
-      panY = startPanY + (curMidY - startMidY);
+      // Current midpoint between fingers
+      const m = tmid(t[0], t[1]);
+
+      // Zoom around the original focal point (startMid), then account for
+      // how much the midpoint has translated since the pinch started.
+      const scaleRatio = newScale / startScale;
+      panX = startMidX - scaleRatio * (startMidX - startPanX) + (m.x - startMidX);
+      panY = startMidY - scaleRatio * (startMidY - startPanY) + (m.y - startMidY);
+      scale = newScale;
 
       applyTransform();
-    } else if (touches.length === 1 && swiping && scale <= 1) {
-      // only swipe navigate when not zoomed
-      const dx = touches[0].clientX - swipeStartX;
-      const dy = touches[0].clientY - swipeStartY;
+    } else if (e.touches.length === 1 && swiping && scale <= 1) {
+      const dx = e.touches[0].clientX - swipeStartX;
+      const dy = e.touches[0].clientY - swipeStartY;
       if (Math.abs(dx) > Math.abs(dy) + 10 && Math.abs(dx) > 5) {
-        e.preventDefault(); // prevent scroll while swiping horizontally
+        e.preventDefault();
       }
     }
   }, { passive: false });
 
   viewport.addEventListener("touchend", (e) => {
-    const remaining = Array.from(e.touches);
-
-    if (remaining.length === 0 && swiping && scale <= 1) {
+    // Swipe-to-navigate (only when not zoomed)
+    if (e.touches.length === 0 && swiping && scale <= 1) {
       const dx = e.changedTouches[0].clientX - swipeStartX;
       const dy = e.changedTouches[0].clientY - swipeStartY;
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
@@ -315,26 +355,32 @@ const fullImages = await Promise.all(
       }
     }
 
-    touches = remaining;
-    if (remaining.length < 2) {
-      // one finger lifted during pinch — update baseline for remaining finger
-      startPanX = panX;
-      startPanY = panY;
-      if (remaining.length === 1) {
-        swipeStartX = remaining[0].clientX;
-        swipeStartY = remaining[0].clientY;
-      }
+    // Snap back to fit if pinch went below scale 1
+    if (scale < 1) {
+      restoreFlexLayout();
+      pinching = false;
+      return;
     }
 
-    // snap back to scale 1 if pinch went below 1
-    if (scale < 1) { scale = 1; panX = 0; panY = 0; applyTransform(); }
+    // When all fingers lift and we're back to scale==1, restore flex centering
+    if (e.touches.length === 0 && scale <= 1) {
+      restoreFlexLayout();
+      pinching = false;
+    }
+
+    // Update swipe baseline if one finger remains
+    if (e.touches.length === 1) {
+      swipeStartX = e.touches[0].clientX;
+      swipeStartY = e.touches[0].clientY;
+      swiping = true;
+    }
   }, { passive: true });
 
   // double-tap to reset zoom
   let lastTap = 0;
   viewport.addEventListener("touchend", () => {
     const now = Date.now();
-    if (now - lastTap < 300) { resetTransform(); }
+    if (now - lastTap < 300) { restoreFlexLayout(); pinching = false; }
     lastTap = now;
   }, { passive: true });
 </script>
