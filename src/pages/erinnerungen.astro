@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import FancyLayout from "../layouts/FancyLayout.astro";
 
 import img1 from "../assets/IMG-20260508-WA0007.jpg";
@@ -13,7 +13,12 @@ import img8 from "../assets/IMG-20260513-WA0022.jpg";
 import img9 from "../assets/IMG-20260514-WA0003.jpg";
 import img10 from "../assets/IMG-20260514-WA0010.jpg";
 
-const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
+const rawImages = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
+
+// Generate optimised full-size URLs (capped at 1600px wide) for the lightbox
+const fullImages = await Promise.all(
+  rawImages.map((img) => getImage({ src: img, width: 1600, format: "webp" }))
+);
 ---
 
 <FancyLayout title="Erinnerungen">
@@ -23,15 +28,36 @@ const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
   </div>
 
   <div class="gallery wide">
-    {images.map((img, i) => (
-      <a href={img.src} target="_blank" rel="noopener" class="item">
-        <Image src={img} alt={`Hochzeitsfoto ${i + 1}`} widths={[400, 800]} sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw" />
-      </a>
+    {rawImages.map((img, i) => (
+      <button
+        class="item"
+        data-index={i}
+        data-src={fullImages[i].src}
+        aria-label={`Foto ${i + 1} öffnen`}
+      >
+        <Image
+          src={img}
+          alt={`Hochzeitsfoto ${i + 1}`}
+          widths={[400, 800]}
+          sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+        />
+      </button>
     ))}
   </div>
 
   <div class="prose" style="margin-top: 2rem;">
     <a href="/">← Zurück zur Startseite</a>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht" hidden>
+    <button id="lb-close" aria-label="Schließen">&#x2715;</button>
+    <button id="lb-prev" aria-label="Vorheriges Bild">&#x2039;</button>
+    <button id="lb-next" aria-label="Nächstes Bild">&#x203A;</button>
+    <div id="lb-viewport">
+      <img id="lb-img" src="" alt="" />
+    </div>
+    <div id="lb-counter"></div>
   </div>
 </FancyLayout>
 
@@ -44,15 +70,19 @@ const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
   }
 
   @media (max-width: 600px) {
-    .gallery {
-      grid-template-columns: 1fr;
-    }
+    .gallery { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 601px) and (max-width: 900px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); }
   }
 
-  @media (min-width: 601px) and (max-width: 900px) {
-    .gallery {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .item {
+    display: block;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    overflow: hidden;
   }
 
   .item img {
@@ -64,7 +94,247 @@ const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
     transition: opacity 0.2s;
   }
 
-  .item:hover img {
-    opacity: 0.9;
+  .item:hover img { opacity: 0.9; }
+
+  /* ── Lightbox ── */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #lightbox[hidden] { display: none; }
+
+  #lb-viewport {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #lightbox:not([hidden]) #lb-viewport {
+    touch-action: none; /* only block touch when lightbox is open */
+  }
+
+  #lb-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  #lb-close,
+  #lb-prev,
+  #lb-next {
+    position: fixed;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 0.5rem;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+    z-index: 1001;
+  }
+
+  #lb-close:hover, #lb-prev:hover, #lb-next:hover { opacity: 1; }
+
+  #lb-close { top: 1rem; right: 1rem; font-size: 1.5rem; }
+  #lb-prev   { left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 3rem; }
+  #lb-next   { right: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 3rem; }
+
+  #lb-counter {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    font-family: var(--font-dm-sans), sans-serif;
+    pointer-events: none;
   }
 </style>
+
+<script>
+  const srcs: string[] = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".item[data-src]")
+  ).map((el) => el.dataset.src!);
+
+  const lb       = document.getElementById("lightbox")!;
+  const lbImg    = document.getElementById("lb-img") as HTMLImageElement;
+  const lbClose  = document.getElementById("lb-close")!;
+  const lbPrev   = document.getElementById("lb-prev")!;
+  const lbNext   = document.getElementById("lb-next")!;
+  const lbCounter= document.getElementById("lb-counter")!;
+  const viewport = document.getElementById("lb-viewport")!;
+
+  let current = 0;
+
+  // ── open / close ──────────────────────────────────────────────────────────
+  function openLightbox(index: number) {
+    current = index;
+    show();
+    document.body.style.overflow = "hidden";
+  }
+
+  function close() {
+    lb.hidden = true;
+    document.body.style.overflow = "";
+    resetTransform();
+  }
+
+  function show() {
+    lbImg.src = srcs[current];
+    lbImg.alt = `Hochzeitsfoto ${current + 1}`;
+    lbCounter.textContent = `${current + 1} / ${srcs.length}`;
+    lbPrev.style.display = current === 0 ? "none" : "";
+    lbNext.style.display = current === srcs.length - 1 ? "none" : "";
+    lb.hidden = false;
+    resetTransform();
+  }
+
+  function prev() { if (current > 0) { current--; show(); } }
+  function next() { if (current < srcs.length - 1) { current++; show(); } }
+
+  document.querySelectorAll<HTMLButtonElement>(".item").forEach((btn) => {
+    btn.addEventListener("click", () => openLightbox(Number(btn.dataset.index)));
+  });
+
+  lbClose.addEventListener("click", close);
+  lbPrev.addEventListener("click", prev);
+  lbNext.addEventListener("click", next);
+
+  lb.addEventListener("click", (e) => { if (e.target === lb || e.target === viewport) close(); });
+
+  document.addEventListener("keydown", (e) => {
+    if (lb.hidden) return;
+    if (e.key === "Escape")      close();
+    if (e.key === "ArrowLeft")   prev();
+    if (e.key === "ArrowRight")  next();
+  });
+
+  // ── pinch-zoom + pan ──────────────────────────────────────────────────────
+  let scale = 1, originX = 0, originY = 0;
+  let panX = 0, panY = 0;
+
+  function resetTransform() {
+    scale = 1; panX = 0; panY = 0; originX = 0; originY = 0;
+    applyTransform();
+  }
+
+  function applyTransform() {
+    lbImg.style.transformOrigin = `${originX}px ${originY}px`;
+    lbImg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+  }
+
+  // pinch state
+  let touches: Touch[] = [];
+  let startDist = 0, startScale = 1;
+  let startMidX = 0, startMidY = 0;
+  let startPanX = 0, startPanY = 0;
+
+  // swipe state (single finger, no zoom active)
+  let swipeStartX = 0, swipeStartY = 0, swiping = false;
+
+  function dist(a: Touch, b: Touch) {
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  }
+  function mid(a: Touch, b: Touch) {
+    return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
+  }
+
+  viewport.addEventListener("touchstart", (e) => {
+    touches = Array.from(e.touches);
+    if (touches.length === 2) {
+      // pinch begin
+      startDist  = dist(touches[0], touches[1]);
+      startScale = scale;
+      const m   = mid(touches[0], touches[1]);
+      // midpoint relative to image element origin
+      const r   = lbImg.getBoundingClientRect();
+      startMidX = m.x - r.left;
+      startMidY = m.y - r.top;
+      originX   = startMidX;
+      originY   = startMidY;
+      startPanX = panX;
+      startPanY = panY;
+      swiping   = false;
+    } else if (touches.length === 1) {
+      swipeStartX = touches[0].clientX;
+      swipeStartY = touches[0].clientY;
+      swiping = true;
+    }
+  }, { passive: true });
+
+  viewport.addEventListener("touchmove", (e) => {
+    touches = Array.from(e.touches);
+    if (touches.length === 2) {
+      swiping = false;
+      e.preventDefault();
+      const newDist = dist(touches[0], touches[1]);
+      scale = Math.min(8, Math.max(1, startScale * (newDist / startDist)));
+
+      // keep pinch midpoint stable under finger
+      const m   = mid(touches[0], touches[1]);
+      const r   = lbImg.getBoundingClientRect();
+      const curMidX = m.x - r.left;
+      const curMidY = m.y - r.top;
+      panX = startPanX + (curMidX - startMidX);
+      panY = startPanY + (curMidY - startMidY);
+
+      applyTransform();
+    } else if (touches.length === 1 && swiping && scale <= 1) {
+      // only swipe navigate when not zoomed
+      const dx = touches[0].clientX - swipeStartX;
+      const dy = touches[0].clientY - swipeStartY;
+      if (Math.abs(dx) > Math.abs(dy) + 10 && Math.abs(dx) > 5) {
+        e.preventDefault(); // prevent scroll while swiping horizontally
+      }
+    }
+  }, { passive: false });
+
+  viewport.addEventListener("touchend", (e) => {
+    const remaining = Array.from(e.touches);
+
+    if (remaining.length === 0 && swiping && scale <= 1) {
+      const dx = e.changedTouches[0].clientX - swipeStartX;
+      const dy = e.changedTouches[0].clientY - swipeStartY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx < 0) next(); else prev();
+      }
+    }
+
+    touches = remaining;
+    if (remaining.length < 2) {
+      // one finger lifted during pinch — update baseline for remaining finger
+      startPanX = panX;
+      startPanY = panY;
+      if (remaining.length === 1) {
+        swipeStartX = remaining[0].clientX;
+        swipeStartY = remaining[0].clientY;
+      }
+    }
+
+    // snap back to scale 1 if pinch went below 1
+    if (scale < 1) { scale = 1; panX = 0; panY = 0; applyTransform(); }
+  }, { passive: true });
+
+  // double-tap to reset zoom
+  let lastTap = 0;
+  viewport.addEventListener("touchend", () => {
+    const now = Date.now();
+    if (now - lastTap < 300) { resetTransform(); }
+    lastTap = now;
+  }, { passive: true });
+</script>
