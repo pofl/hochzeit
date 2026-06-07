@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import FancyLayout from "../layouts/FancyLayout.astro";
 
 import img1 from "../assets/IMG-20260508-WA0007.jpg";
 import img2 from "../assets/IMG-20260508-WA0029.jpg";
@@ -16,44 +15,33 @@ import img10 from "../assets/IMG-20260514-WA0010.jpg";
 const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9];
 ---
 
-<FancyLayout title="Erinnerungen">
-  <div class="prose">
-    <h2>Erinnerungen</h2>
-    <p>Ein paar Momente, die wir festgehalten haben.</p>
-  </div>
+<!-- Thumbnail grid -->
+<div class="gallery wide" id="gallery">
+  {
+    images.map((img, i) => (
+      <a href={`#foto-${i}`} class="item" aria-label={`Foto ${i + 1} öffnen`}>
+        <Image
+          src={img}
+          alt={`Hochzeitsfoto ${i + 1}`}
+          widths={[400, 800]}
+          sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+        />
+      </a>
+    ))
+  }
+</div>
 
-  <!-- Thumbnail grid -->
-  <div class="gallery wide" id="gallery">
-    {
-      images.map((img, i) => (
-        <a href={`#foto-${i}`} class="item" aria-label={`Foto ${i + 1} öffnen`}>
-          <Image
-            src={img}
-            alt={`Hochzeitsfoto ${i + 1}`}
-            widths={[400, 800]}
-            sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-          />
-        </a>
-      ))
-    }
-  </div>
-
-  <div class="prose" style="margin-top: 2rem;">
-    <a href="/">← Zurück zur Startseite</a>
-  </div>
-
-  <!-- Full-screen scroll-snap strip (hidden off-screen until an anchor is targeted) -->
-  <div class="strip" id="strip">
-    <a href="#gallery" class="close" aria-label="Schließen">&#x2715;</a>
-    {
-      images.map((img, i) => (
-        <div class="slide" id={`foto-${i}`}>
-          <Image src={img} alt={`Hochzeitsfoto ${i + 1}`} widths={[800, 1600]} sizes="100vw" />
-        </div>
-      ))
-    }
-  </div>
-</FancyLayout>
+<!-- Full-screen scroll-snap strip (hidden off-screen until an anchor is targeted) -->
+<div class="strip" id="strip">
+  <a href="#gallery" class="close" aria-label="Schließen">&#x2715;</a>
+  {
+    images.map((img, i) => (
+      <div class="slide" id={`foto-${i}`}>
+        <Image src={img} alt={`Hochzeitsfoto ${i + 1}`} widths={[800, 1600]} sizes="100vw" />
+      </div>
+    ))
+  }
+</div>
 
 <style>
   /* ── Thumbnail grid ─────────────────────────────────────────────────────── */
@@ -96,7 +84,7 @@ const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9];
   /* ── Full-screen strip ──────────────────────────────────────────────────── */
   /*
    * The strip is position:fixed and sits below the viewport (top: 100vh).
-   * When any #foto-N anchor is targeted, :target-within moves it to top:0.
+   * When any #foto-N anchor is targeted, :has(:target) moves it to top:0.
    * Pure CSS, no JS.
    */
   .strip {
