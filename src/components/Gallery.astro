@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 
 import img1 from "../assets/IMG-20260508-WA0007.jpg";
 import img2 from "../assets/IMG-20260508-WA0029.jpg";
@@ -13,16 +13,45 @@ import img9 from "../assets/IMG-20260514-WA0003.jpg";
 import img10 from "../assets/IMG-20260514-WA0010.jpg";
 
 const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9];
+
+// Build an optimized full-size version of each image for the lightbox.
+// getImage runs through Astro's asset pipeline (Sharp), so PhotoSwipe gets a
+// cache-busted, optimized URL plus the exact width/height it needs.
+const slides = await Promise.all(
+  images.map(async (img, i) => {
+    const full = await getImage({
+      src: img,
+      width: Math.min(img.width, 1600),
+      format: "webp",
+    });
+    return {
+      i,
+      thumb: img,
+      href: full.src,
+      width: full.attributes.width ?? full.options.width ?? img.width,
+      height: full.attributes.height ?? Math.round((img.height / img.width) * (full.options.width ?? img.width)),
+      alt: `Hochzeitsfoto ${i + 1}`,
+    };
+  }),
+);
 ---
 
 <!-- Thumbnail grid -->
 <div class="gallery wide" id="gallery">
   {
-    images.map((img, i) => (
-      <a href={`#foto-${i}`} class="item" aria-label={`Foto ${i + 1} öffnen`}>
+    slides.map((slide) => (
+      <a
+        href={slide.href}
+        class="item lightbox-trigger"
+        data-pswp-width={slide.width}
+        data-pswp-height={slide.height}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Foto ${slide.i + 1} öffnen`}
+      >
         <Image
-          src={img}
-          alt={`Hochzeitsfoto ${i + 1}`}
+          src={slide.thumb}
+          alt={slide.alt}
           widths={[400, 800]}
           sizes="(min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
         />
@@ -31,17 +60,32 @@ const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9];
   }
 </div>
 
-<!-- Full-screen scroll-snap strip (hidden off-screen until an anchor is targeted) -->
-<div class="strip" id="strip">
-  <a href="#gallery" class="close" aria-label="Schließen">&#x2715;</a>
-  {
-    images.map((img, i) => (
-      <div class="slide" id={`foto-${i}`}>
-        <Image src={img} alt={`Hochzeitsfoto ${i + 1}`} widths={[800, 1600]} sizes="100vw" />
-      </div>
-    ))
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import PhotoSwipe from "photoswipe";
+  import "photoswipe/style.css";
+
+  let lightbox: PhotoSwipeLightbox | null = null;
+
+  function initPhotoSwipe() {
+    if (lightbox) {
+      lightbox.destroy();
+      lightbox = null;
+    }
+
+    if (!document.querySelector("#gallery .lightbox-trigger")) return;
+
+    lightbox = new PhotoSwipeLightbox({
+      gallery: "#gallery",
+      children: ".lightbox-trigger",
+      pswpModule: PhotoSwipe,
+    });
+    lightbox.init();
   }
-</div>
+
+  initPhotoSwipe();
+  document.addEventListener("astro:page-load", initPhotoSwipe);
+</script>
 
 <style>
   /* ── Thumbnail grid ─────────────────────────────────────────────────────── */
@@ -66,6 +110,7 @@ const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9];
   .item {
     display: block;
     overflow: hidden;
+    cursor: zoom-in;
   }
 
   .item img {
@@ -79,70 +124,5 @@ const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9];
 
   .item:hover img {
     opacity: 0.85;
-  }
-
-  /* ── Full-screen strip ──────────────────────────────────────────────────── */
-  /*
-   * The strip is position:fixed and sits below the viewport (top: 100vh).
-   * When any #foto-N anchor is targeted, :has(:target) moves it to top:0.
-   * Pure CSS, no JS.
-   */
-  .strip {
-    position: fixed;
-    inset: 0;
-    top: 100vh; /* hidden below viewport by default */
-    background: #000;
-    display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    transition: top 0s; /* instant — the anchor jump handles navigation */
-    z-index: 100;
-  }
-
-  /* Show the strip when any slide is targeted */
-  .strip:has(:target) {
-    top: 0;
-  }
-
-  .slide {
-    flex: 0 0 100vw;
-    width: 100vw;
-    height: 100dvh;
-    scroll-snap-align: start;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .slide img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    /* Let the browser handle pinch-zoom natively */
-    touch-action: pan-x pan-y pinch-zoom;
-  }
-
-  .close {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 101;
-    color: #fff;
-    font-size: 1.5rem;
-    line-height: 1;
-    padding: 0.4rem 0.6rem;
-    background: rgba(0, 0, 0, 0.45);
-    border-radius: 4px;
-    text-decoration: none;
-    /* Only visible when strip is open */
-    display: none;
-  }
-
-  .strip:has(:target) .close {
-    display: block;
   }
 </style>
