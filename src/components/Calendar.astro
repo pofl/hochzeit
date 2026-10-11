@@ -13,13 +13,13 @@
     <div class="calendar-header">So</div>
 
     <!-- Woche der Hochzeit: 4. - 10. Mai -->
-    <div class="calendar-day normal">4</div>
-    <button class="calendar-day secondary" popovertarget="pop-5">5</button>
-    <button class="calendar-day event" popovertarget="pop-6">6</button>
-    <button class="calendar-day event" popovertarget="pop-7">7</button>
-    <div class="calendar-day normal">8</div>
-    <div class="calendar-day weekend">9</div>
-    <div class="calendar-day weekend">10</div>
+    <div class="calendar-day button-muted">4</div>
+    <button class="calendar-day button-secondary" popovertarget="pop-5">5</button>
+    <button class="calendar-day button-primary" popovertarget="pop-6">6</button>
+    <button class="calendar-day button-primary" popovertarget="pop-7">7</button>
+    <div class="calendar-day button-muted">8</div>
+    <div class="calendar-day button-inactive">9</div>
+    <div class="calendar-day button-inactive">10</div>
   </div>
 
   <div id="pop-5" popover class="event-popover">
@@ -72,91 +72,29 @@
   .calendar {
     display: block;
     margin: 2em 0;
-  }
 
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    max-width: 100%;
-  }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      max-width: 100%;
+    }
 
-  .calendar-header {
-    text-align: center;
-    font-weight: 600;
-    padding: 8px 4px;
-    font-size: 0.85em;
-    color: var(--text-muted);
-  }
-
-  .calendar-day {
-    text-align: center;
-    padding: 10px 4px;
-    border-radius: 8px;
-    font-size: 0.95em;
-    position: relative;
-
-    &.normal {
-      background: var(--surface-neutral);
+    .calendar-header {
+      text-align: center;
+      font-weight: 600;
+      padding: 8px 4px;
+      font-size: 0.85em;
       color: var(--text-muted);
     }
 
-    &.weekend {
-      background: var(--surface-neutral-hover);
-      color: var(--text-subtle);
-      font-weight: 400;
+    .calendar-day {
+      box-sizing: border-box;
+      width: 100%;
+      text-align: center;
+      font-size: 0.95em;
+      position: relative;
     }
-
-    &.event {
-      background: var(--orange);
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition:
-        background 0.2s ease,
-        transform 0.1s ease;
-
-      &:hover {
-        background: var(--orange-dark);
-        transform: scale(1.05);
-      }
-    }
-
-    &.secondary {
-      background: color-mix(in srgb, var(--orange), white 80%);
-      color: var(--orange-dark);
-      font-weight: 600;
-      cursor: pointer;
-      transition:
-        background 0.2s ease,
-        transform 0.1s ease;
-
-      &:hover {
-        background: color-mix(in srgb, var(--orange), white 65%);
-        transform: scale(1.05);
-      }
-    }
-
-    &.tertiary {
-      background: var(--orange-tint);
-      color: var(--orange-dark);
-      font-weight: 400;
-      cursor: pointer;
-      transition:
-        background 0.2s ease,
-        transform 0.1s ease;
-
-      &:hover {
-        background: color-mix(in srgb, var(--orange), white 80%);
-        transform: scale(1.05);
-      }
-    }
-  }
-
-  button.calendar-day {
-    border: none;
-    font-family: inherit;
-    font-size: inherit;
   }
 
   .event-popover {
