@@ -1,24 +1,13 @@
 ---
 import { Image, getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
-import img1 from "../assets/IMG-20260508-WA0007.jpg";
-import img2 from "../assets/IMG-20260508-WA0029.jpg";
-import img3 from "../assets/IMG-20260508-WA0030.jpg";
-import img4 from "../assets/IMG-20260509-WA0017.jpg";
-import img5 from "../assets/IMG-20260509-WA0020.jpg";
-import img6 from "../assets/IMG-20260513-WA0000.jpg";
-import img7 from "../assets/IMG-20260513-WA0001.jpg";
-import img8 from "../assets/IMG-20260513-WA0022.jpg";
-import img9 from "../assets/IMG-20260514-WA0003.jpg";
-import img10 from "../assets/IMG-20260514-WA0010.jpg";
-import img11 from "../assets/DSC04119.jpg";
-import img12 from "../assets/DSC04638.jpg";
-import img13 from "../assets/DSC04871.jpg";
-import img14 from "../assets/DSC04955.jpg";
-import img15 from "../assets/DSC05031.jpg";
-import img16 from "../assets/RAH04141.jpg";
+interface Props {
+  images: ImageMetadata[];
+  class?: string;
+}
 
-const images = [img8, img2, img3, img4, img10, img6, img5, img7, img1, img9, img11, img12, img13, img14, img15, img16];
+const { images, class: className } = Astro.props;
 
 // Build an optimized full-size version of each image for the lightbox.
 // getImage runs through Astro's asset pipeline (Sharp), so PhotoSwipe gets a
@@ -43,7 +32,7 @@ const slides = await Promise.all(
 ---
 
 <!-- Thumbnail grid -->
-<div class="gallery wide" id="gallery">
+<div class:list={["gallery", className]} data-photo-gallery>
   {
     slides.map((slide) => (
       <a
@@ -68,25 +57,25 @@ const slides = await Promise.all(
 
 <script>
   import PhotoSwipe from "photoswipe";
-  import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import "photoswipe/style.css";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/style.css";
 
-  let lightbox: PhotoSwipeLightbox | null = null;
+  let lightboxes: PhotoSwipeLightbox[] = [];
 
   function initPhotoSwipe() {
-    if (lightbox) {
-      lightbox.destroy();
-      lightbox = null;
-    }
+    lightboxes.forEach((lightbox) => lightbox.destroy());
+    lightboxes = [];
 
-    if (!document.querySelector("#gallery .lightbox-trigger")) return;
-
-    lightbox = new PhotoSwipeLightbox({
-      gallery: "#gallery",
-      children: ".lightbox-trigger",
-      pswpModule: PhotoSwipe,
+    document.querySelectorAll<HTMLElement>("[data-photo-gallery]").forEach((gallery) => {
+      if (!gallery.querySelector(".lightbox-trigger")) return;
+      const lightbox = new PhotoSwipeLightbox({
+        gallery,
+        children: ".lightbox-trigger",
+        pswpModule: PhotoSwipe,
+      });
+      lightbox.init();
+      lightboxes.push(lightbox);
     });
-    lightbox.init();
   }
 
   initPhotoSwipe();
