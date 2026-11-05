@@ -92,4 +92,10 @@ const { backgroundImage } = Astro.props;
     font-weight: 400;
     font-style: normal;
   }
+
+  /* text-shadow doesn't reach borders, so drop-shadow outlines the whole box, borders included */
+  .header.has-image .info {
+    text-shadow: none;
+    filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 4px #000) drop-shadow(0 2px 12px #000);
+  }
 </style>
