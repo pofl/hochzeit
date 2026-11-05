@@ -1,0 +1,14 @@
+---
+import garland from "../assets/garland-exchange.jpg";
+import FancyLayout from "./FancyLayout.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<FancyLayout title={title} headerImage={garland}>
+  <slot />
+</FancyLayout>
